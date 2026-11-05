@@ -1,104 +1,9 @@
-# 📋 Roadmap & Plan de Trabajo – Prueba Técnica CBC
-
-> **Aclaración fundamental de Arquitectura:**  
-> **¿Dónde se limpian los datos?**  
-> ❌ **NO se limpian dentro de `GET /proyectos` ni en `GET /resumen`.** Si limpiaras los datos cuando un usuario consulta la API, tendrías que llamar en ese mismo instante a la fuente externa (que es lenta y falla con 429/500), haciendo la API lenta y propensa a caídas.  
-> ✅ **Se limpian ANTES, en un proceso previo llamado "Ingesta" (ETL).**  
-> Tu aplicación tiene **dos roles separados**:
-> 1. **Proceso de Ingesta (Segundo plano / Al arrancar):** Va a buscar los datos a la `mock-api`, los limpia, guarda los inválidos en `rejected.json` y guarda los válidos en tu base de datos SQLite.
-> 2. **Servidor API (Tus endpoints):** Cuando alguien llama a `GET /proyectos` o `GET /resumen`, tu API **únicamente consulta tu SQLite local** (donde todo ya está 100% limpio y sin duplicados) y responde al instante.
-
----
-
-## 🧭 Los Dos Roles de tu Aplicación (Separación Clara)
-
-```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ ROL A: PROCESO DE INGESTA (ETL)                                                        │
-│ Se ejecuta al arrancar el contenedor o mediante un comando/trigger.                   │
-│                                                                                        │
-│ 1. Cliente HTTP      ──> Consume las páginas de mock-api (con reintentos 429 y 500).  │
-│ 2. Normalizador      ──> Limpia fechas, montos, regiones, estados.                    │
-│ 3. Rechazos          ──> Si un registro es inválido, lo escribe en rejected.json.      │
-│ 4. Deduplicador      ──> Si hay IDs repetidos, conserva el más reciente.               │
-│ 5. Guardado          ──> Inserta o actualiza los proyectos limpios en SQLite.          │
-└──────────────────────────────────────────┬─────────────────────────────────────────────┘
-                                           │
-                                           ▼ Guarda datos limpios
-                                  [( Base de Datos SQLite )]
-                                           ▲
-                                           │ Solo lee de aquí
-┌──────────────────────────────────────────┴─────────────────────────────────────────────┐
-│ ROL B: SERVIDOR API REST                                                               │
-│ Responde a los clientes/evaluadores que consultan tu servicio.                         │
-│                                                                                        │
-│ 1. Guardia de Seguridad ──> Valida la cabecera X-API-Key (401 si falla).               │
-│ 2. GET /proyectos       ──> Lee de SQLite, filtra por región/estado/monto y pagina.    │
-│ 3. GET /resumen         ──> Lee de SQLite, agrupa y suma montos por región.            │
-└────────────────────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 🗺️ Diagrama del Flujo Completo
-
-```mermaid
-flowchart TD
-    subgraph ROL_A ["ROL A: Proceso de Ingesta (Se corre al inicio o vía trigger)"]
-        MockAPI["mock-api (:8001)<br/>(Falla con 429 / 500)"]
-        Cliente["1. Cliente HTTP Resiliente<br/>(Lee páginas 1 a N con reintentos)"]
-        Limpieza{"2. ¿Pasa validación?<br/>(id, nombre, monto, fecha, región, estado)"}
-        Rechazados[/"Archivo rejected.json<br/>(id, nombre, motivo)"/]
-        Deduplicador["3. Deduplicador<br/>(Mismo ID -> gana actualizado_en más reciente)"]
-        Guardar["4. Guardar en SQLite<br/>(dev.db)"]
-    end
-
-    subgraph ROL_B ["ROL B: Tus Endpoints API (Responden a usuarios)"]
-        Peticion["Petición HTTP entrante<br/>(:8000)"]
-        Auth{"¿X-API-Key válida?"}
-        Unauthorized["401 Unauthorized"]
-        EP1["GET /proyectos<br/>(Lee SQLite con filtros y paginación)"]
-        EP2["GET /resumen<br/>(Lee SQLite agrupando por región)"]
-    end
-
-    MockAPI --> Cliente
-    Cliente --> Limpieza
-    Limpieza -- "Inválido" --> Rechazados
-    Limpieza -- "Válido" --> Deduplicador
-    Deduplicador --> Guardar
-    Guardar --> DB[("SQLite: dev.db")]
-
-    Peticion --> Auth
-    Auth -- "No" --> Unauthorized
-    Auth -- "Sí" --> DB
-    DB --> EP1
-    DB --> EP2
-```
-
----
-
-## 🧩 ¿Qué componentes de código programas exactamente?
-
-| Archivo / Componente | Qué hace | ¿En qué momento se usa? |
-| :--- | :--- | :--- |
-| **1. Módulo Normalizador (`cleaner.ts`)** | Funciones puras que reciben un registro sucio de texto y devuelven el dato tipado/limpio o el código de rechazo (`fecha_invalida`, `monto_invalido`, etc.). | Usado en la Ingesta. |
-| **2. Cliente Ingesta (`ingestion.service.ts`)** | Llama a `mock-api` con reintentos $\rightarrow$ llama al normalizador $\rightarrow$ genera `rejected.json` $\rightarrow$ guarda en SQLite. | Al iniciar el servidor o por comando. |
-| **3. Controlador API (`projects.controller.ts`)** | Expone `GET /proyectos` y `GET /resumen` leyendo directamente de SQLite. | Cada vez que un usuario hace una petición. |
-| **4. Guard de Autenticación (`api-key.guard.ts`)** | Compara el header `X-API-Key` contra la variable de entorno `API_KEY`. | En cada petición a la API. |
-
----
+# Roadmap & Plan de Trabajo – Prueba Técnica CBC
 
 ## 📌 Checklist Detallado por Etapas
 
-### ✅ Etapa 0: Entorno y Setup Base (Listo)
-- [x] **0.1. Mock API levantada:** Verificada con Docker en puerto 8001.
-- [x] **0.2. Backend inicializado:** Creado con NestJS + TypeScript en `app/`.
-- [x] **0.3. Base de Datos configurada:** Prisma ORM con modelo `Project` y SQLite listo.
-- [x] **0.4. Docker compose configurado:** Ambos servicios integrados con volumen para persistencia.
-
----
-
 ### ⏳ Etapa 1: Funciones de Limpieza y Normalización (Lógica Pura)
+
 > **Objetivo:** Escribir funciones que reciban el texto crudo y devuelvan el objeto limpio o lancen el motivo de rechazo exacto exigido por `CONTRATO.md`.
 
 - [x] **1.1. Limpiador de ID y Nombres:**
@@ -129,6 +34,7 @@ flowchart TD
 ---
 
 ### ⏳ Etapa 2: Proceso de Ingesta (El pipeline ETL)
+
 > **Objetivo:** El proceso que se conecta a la `mock-api`, maneja los errores de red, aplica la limpieza y guarda en SQLite.
 
 - [x] **2.1. Cliente HTTP con reintentos:**
@@ -144,6 +50,7 @@ flowchart TD
 ---
 
 ### ⏳ Etapa 3: Endpoints de la API REST
+
 > **Objetivo:** Exponer los datos ya limpios desde SQLite hacia el exterior.
 
 - [x] **3.1. Autenticación (`X-API-Key`):**
@@ -163,11 +70,12 @@ flowchart TD
 ---
 
 ### ⏳ Etapa 4: Documentación y Entrega Final
+
 - [x] **4.1. `DISENO.md` (Parte 2):** Respuestas de diseño y trade-offs listas.
-- [ ] **4.2. `README.md` (Parte 1):**
-  - Comandos para levantar (`docker compose up --build`).
+- [x] **4.2. `README.md` (Parte 1):**
+  - Comandos para levantar con Docker y local.
   - Variables de entorno, puertos y claves de prueba.
-  - Explicar cómo corre la ingesta y dónde queda `rejected.json`.
-  - Justificación de SQLite, supuestos y mención de herramientas de IA.
-- [ ] **4.3. Entrega en GitHub:**
-  - Dar permisos de lectura a `doyarce@cbc.cl` y `gleal@cbc.cl`.
+  - Explicación clara de la ingesta y archivo de rechazados.
+  - Justificación técnica realista, supuestos y qué mejoraría con más tiempo.
+- [x] **4.3. Entrega en GitHub:**
+  - Dar permisos de lectura a `doyarce@cbc.cl` y `gleal@cbc.cl`, o dejar repositorio público y enviar enlace.
