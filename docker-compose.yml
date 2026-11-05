@@ -42,7 +42,7 @@ services:
       API_KEY: ${API_KEY:-dev-api-key}
       SOURCE_BASE_URL: http://mock-api:8000
       SOURCE_API_KEY: ${SOURCE_API_KEY:-dev-source-key}
-      DATABASE_URL: "file:./data/dev.db"
+      DATABASE_URL: "file:../data/dev.db"
       REJECTED_FILE_PATH: "./data/rejected.json"
     volumes:
       - ./app/data:/usr/src/app/data
