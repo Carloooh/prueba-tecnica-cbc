@@ -58,9 +58,10 @@ Cubren casos borde de normalización de montos, validación de fechas reales en 
 
 1. **Framework (NestJS + TypeScript):** Elegido por su arquitectura modular por capas (servicios, controladores, guards), inyección de dependencias y tipado estricto que previene desajustes de contrato en tiempo de compilación.
 2. **Base de Datos (SQLite + Prisma):** Ideal para la portabilidad del ejercicio (~100 proyectos) sin requerir contenedores pesados de bases de datos externas. Prisma asegura tipos exactos y transacciones seguras para operaciones de agregación y filtros.
-3. **Manejo de Duplicados:** Si dos registros válidos comparten el mismo ID pero difieren en datos, se conserva el que tiene `actualizado_en` más reciente. Si tienen exactamente el mismo timestamp, se preserva la última instancia procesada.
-4. **Seguridad:** La API exige la cabecera `X-API-Key` validada contra la variable `API_KEY`. Respuestas no autenticadas devuelven `401 Unauthorized`.
-5. **Herramientas:** Se utilizó asistencia de IA para acelerar el scaffolding del proyecto, expresiones regulares complejas para parsing chileno y plantillas de pruebas.
+3. **Endpoint `GET /resumen`:** Devuelve directamente la lista consolidada de todas las regiones que tienen al menos un proyecto, calculando cantidad y suma total de montos (`monto_total_musd` a 2 decimales). No recibe parámetros query de filtrado ni paginación, conforme al contrato.
+4. **Manejo de Duplicados:** Si dos registros válidos comparten el mismo ID pero difieren en datos, se conserva el que tiene `actualizado_en` más reciente. Si tienen exactamente el mismo timestamp, se preserva la última instancia procesada.
+5. **Seguridad:** La API exige la cabecera `X-API-Key` validada contra la variable `API_KEY`. Respuestas no autenticadas devuelven `401 Unauthorized`.
+6. **Herramientas:** Se utilizó asistencia de IA para acelerar el scaffolding del proyecto, expresiones regulares complejas para parsing chileno y plantillas de pruebas.
 
 ---
 
@@ -70,6 +71,6 @@ Cubren casos borde de normalización de montos, validación de fechas reales en 
 - **Detección de Cambios (Diffing):** Agregar una tabla de auditoría para registrar histórico de transiciones de estado de los proyectos entre ejecuciones sucesivas.
 - **Métricas:** Integrar Prometheus y OpenTelemetry para registrar métricas de tasa de fallos de fuentes externas y latencia por página.
 
-podría añadirse el endpoint para consultar un proyecto por id o nombre, más específico en vez de traer todos,
+podría añadirse el endpoint para consultar un proyecto por id o nombre, más específico en vez de traer todos, para región se podrían añadir filtros igual como para consultar solo una región o considerar ciertos proyectos sobre un monto o cantidad de proyectos, etc.
 seguridad de conexión mediante credenciales/token
 Swagger para documentar la api y pruebas en interfaz
