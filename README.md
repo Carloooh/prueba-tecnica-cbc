@@ -1,132 +1,69 @@
-# Resolución Prueba Técnica CBC
+# Prueba Técnica CBC – Seguimiento de Proyectos de Inversión
 
-Servicio backend desarrollado con **NestJS (TypeScript)** que ingesta proyectos desde una API externa (`mock-api`), normaliza y valida sus datos, descarta y documenta registros inválidos, resuelve duplicados quedándose con la versión más reciente, persiste los datos limpios en **SQLite (mediante Prisma ORM)** y los expone a través de una API REST protegida por API Key.
-
----
-
-## 🚀 Requisitos Previos
-
-- [Docker](https://www.docker.com/) y Docker Compose (recomendado para ejecución completa).
-- [Node.js](https://nodejs.org/) v20+ y [pnpm](https://pnpm.io/) (para desarrollo local sin Docker).
+Servicio backend desarrollado en **NestJS (TypeScript)** con persistencia en **SQLite (Prisma ORM)**. El sistema realiza la ingesta resiliente de datos desde una API externa inestable (`mock-api`), normaliza los registros bajo reglas chilenas de negocio, documenta los rechazados, resuelve duplicados conservando la versión más reciente y expone los datos limpios mediante una API REST protegida por API Key.
 
 ---
 
-## 🛠️ Variables de Entorno
+## 🚀 Inicio Rápido con Docker (Recomendado)
 
-Crea un archivo `.env` en la raíz copiando `.env.example`:
+Requisito: tener Docker y Docker Compose instalados.
 
-```bash
-cp .env.example .env
-```
-
-| Variable             | Descripción                                              | Valor por Defecto                                                 |
-| -------------------- | -------------------------------------------------------- | ----------------------------------------------------------------- |
-| `PORT`               | Puerto donde escucha el servicio NestJS                  | `8000`                                                            |
-| `API_KEY`            | Clave para autenticarse en **nuestra API** (`X-API-Key`) | `dev-api-key`                                                     |
-| `SOURCE_BASE_URL`    | URL base de la fuente externa                            | `http://mock-api:8000` (Docker) / `http://localhost:8001` (Local) |
-| `SOURCE_API_KEY`     | Clave requerida por la fuente externa                    | `dev-source-key`                                                  |
-| `DATABASE_URL`       | Conexión a la base de datos SQLite                       | `file:./data/dev.db`                                              |
-| `REJECTED_FILE_PATH` | Ruta del archivo de registros descartados                | `./data/rejected.json`                                            |
-
----
-
-## 🐳 Ejecución con Docker Compose (Un solo comando)
-
-Para levantar tanto la fuente de datos (`mock-api`) como nuestro servicio (`app`):
-
-```bash
-docker compose up --build
-```
-
-- **Mock API**: disponible en `http://localhost:8001`
-- **Nuestra API**: disponible en `http://localhost:8000`
-
----
-
-## 💻 Ejecución en Modo Desarrollo (Local)
-
-1. **Instalar dependencias:**
-
+1. **Crear archivo de variables de entorno:**
    ```bash
-   cd app
-   pnpm install
+   cp .env.example .env
    ```
 
-2. **Generar cliente Prisma y base de datos:**
-
+2. **Levantar todos los servicios con un solo comando:**
    ```bash
-   pnpm prisma generate
-   pnpm prisma db push
+   docker compose up --build
    ```
 
-3. **Iniciar el servicio:**
-   ```bash
-   pnpm run start:dev
-   ```
+- **Tu API (NestJS):** escuchando en `http://localhost:8000`
+- **Fuente simulada (mock-api):** escuchando en `http://localhost:8001`
+- **Clave de desarrollo de tu API:** `dev-api-key` (cabecera `X-API-Key`)
 
 ---
 
-## 🔄 Disparo de la Ingesta de Datos
+## 🔄 Cómo funciona la Ingesta (ETL)
 
-La ingesta puede ejecutarse de las siguientes formas:
+Al iniciar el contenedor de la aplicación, el proceso de ingesta se ejecuta automáticamente en segundo plano en 4 etapas claras:
 
-- **Al iniciar el contenedor:** Ejecuta la sincronización automática una vez que la `mock-api` responde healthy.
-- **Vía endpoint administrativo / CLI:** _(Se detallará en la implementación de la Fase 4)_.
+1. **Paso 1/4 (Extracción resiliente):** Recorre todas las páginas de `mock-api` tolerando fallos de red (reintenta errores `500` con backoff exponencial y errores `429` esperando los segundos de `Retry-After`).
+2. **Paso 2/4 (Normalización y Rechazos):** Valida cada registro. Si incumple una regla (formato de monto, fecha inexistente, región o estado inválido), se envía a `app/data/rejected.json` indicando el motivo exacto del fallo.
+3. **Paso 3/4 (Deduplicación):** Si el mismo proyecto llega más de una vez (incluso con el ID escrito con mayúsculas/minúsculas diferentes), se conserva el que tenga la fecha `actualizado_en` más reciente.
+4. **Paso 4/4 (Persistencia Idempotente):** Guarda los registros limpios en SQLite usando `upsert`. Si ejecutas la ingesta múltiples veces, no se generan duplicados ni se alteran los datos válidos.
 
----
-
-## 📂 Archivo de Rechazados
-
-Los registros con inconsistencias o formatos inválidos no entran a la base de datos y se escriben en:
-
-- Ruta: `app/data/rejected.json` (o `./data/rejected.json` montado en volumen).
-- Cada ejecución sobrescribe este archivo, reflejando el estado de la última ingesta.
+> **Dónde revisar los resultados:**
+> - **Archivo de rechazados:** `app/data/rejected.json` (se sobrescribe en cada corrida para reflejar el estado actual).
+> - **Base de datos SQLite:** `app/data/dev.db`.
 
 ---
 
 ## 🧪 Pruebas Automatizadas
 
+Las pruebas unitarias y de integración se ejecutan de forma manual cuando desees verificar la lógica:
+
 ```bash
 cd app
-pnpm test          # Pruebas unitarias
-pnpm test:cov      # Cobertura de pruebas
+pnpm test
 ```
 
----
-
-## ⚖️ Justificaciones y Decisiones Técnicas
-
-### 1. Framework: NestJS (TypeScript)
-
-- **Modularidad y Arquitectura Empresarial:** Arquitectura desacoplada basada en controladores, servicios, inyección de dependencias y módulos.
-- **Tipado Fuerte:** TypeScript previene errores de contrato en tiempo de compilación.
-- **Ecosistema y Testing:** Soporte nativo para validación de DTOs, filtros de excepciones globales y testing ágil con Vitest/Jest.
-
-### 2. Base de Datos: SQLite
-
-- **Simplicidad y Portabilidad:** Base de datos basada en un único archivo, ideal para el volumen de datos del ejercicio (~100-200 proyectos) sin sobrecargar la infraestructura con contenedores pesados de bases de datos externas.
-- **Idempotencia y Rendimiento:** Excelente soporte de transacciones ACID y velocidad de lectura para consultas agrupadas (`/resumen`) y paginadas (`/proyectos`).
-
-### 3. ORM: Prisma
-
-- **Type-safety de Extremo a Extremo:** Genera tipos TypeScript exactos a partir del schema, reduciendo desalineaciones con el contrato.
-- **Migraciones Claras y Simples:** `prisma db push` permite inicializar y sincronizar esquemas SQLite rápidamente dentro de Docker sin configuraciones engorrosas.
-- **Mantenibilidad:** Facilidad para realizar queries filtradas, paginadas y agregaciones (`groupBy`) para el endpoint `/resumen`.
+Cubren casos borde de normalización de montos, validación de fechas reales en el calendario (incluyendo años bisiestos), mapeo de regiones/estados, deduplicación y sobreescritura de rechazados.
 
 ---
 
-## 🤖 Uso de Herramientas de IA y Supuestos
+## ⚖️ Decisiones de Diseño y Supuestos
 
-- **Herramientas:** Uso de IA asistencial para acelerar scaffolding de código, validaciones de expresiones regulares complejas (montos chilenos y fechas en español) y plantillas de pruebas unitarias.
-- **Supuestos y Decisiones de Diseño:**
-  - **Identificador (`id`):** Los IDs llegan como strings tipo `P-0042`, pero con variaciones de minúsculas (`p-0042`), espacios al inicio o final (`' P-0039 '`), o vacíos (`""`). Se limpian aplicando `trim().toUpperCase()`. Si un ID queda vacío, se rechaza inmediatamente con `id_vacio`.
-  - **Montos:** Se procesan tanto el formato chileno con coma (`1.234,5 MM USD`), palabras como `millones` (`US$ 2,5 millones`), como dólares enteros sin unidad (`850000` -> `0.85 MM USD`). Los valores se redondean a un máximo de 3 decimales (`monto_musd`). Valores $\le 0$ son clasificados como `monto_negativo` y textos no numéricos (`N/D`, `a convenir`) como `monto_invalido`.
-  - **Fechas:** Se admiten los formatos `AAAA-MM-DD`, `DD/MM/AAAA` (día primero) y `DD-mmm-AAAA` (meses en español). Se valida contra el calendario astronómico (incluyendo años bisiestos para el 29 de febrero); fechas inexistentes como `31/02/2024` o meses > 12 se rechazan como `fecha_invalida`.
-  - **Regiones y Estados:** Se mapean insensible a mayúsculas, tildes, números romanos y apóstrofes (`O'Higgins`, `Biobío`, `II Región`). Valores no contemplados se rechazan como `region_desconocida` o `estado_desconocido`.
-  - **Deduplicación:** Si un ID limpio llega más de una vez (incluso en distintas páginas o formatos de mayúsculas originales):
-    - Si son idénticos, queda una sola fila.
-    - Si difieren, **gana el registro con `actualizado_en` más reciente** (comparando `Date.getTime()`), sin importar el orden de llegada.
-    - Si tienen exactamente el mismo timestamp, se conserva la versión más reciente procesada.
-    - Los duplicados no se consideran rechazados.
-  - **Archivo de Rechazados:** Se genera un archivo JSON en `data/rejected.json` con los registros inválidos (`id`, `nombre`, `motivo`) que se sobrescribe en cada ingesta.
-  - **Autenticación:** La API rechaza con `401 Unauthorized` si la cabecera `X-API-Key` no coincide con la variable de entorno `API_KEY`.
+1. **Framework (NestJS + TypeScript):** Elegido por su arquitectura modular por capas (servicios, controladores, guards), inyección de dependencias y tipado estricto que previene desajustes de contrato en tiempo de compilación.
+2. **Base de Datos (SQLite + Prisma):** Ideal para la portabilidad del ejercicio (~100 proyectos) sin requerir contenedores pesados de bases de datos externas. Prisma asegura tipos exactos y transacciones seguras para operaciones de agregación y filtros.
+3. **Manejo de Duplicados:** Si dos registros válidos comparten el mismo ID pero difieren en datos, se conserva el que tiene `actualizado_en` más reciente. Si tienen exactamente el mismo timestamp, se preserva la última instancia procesada.
+4. **Seguridad:** La API exige la cabecera `X-API-Key` validada contra la variable `API_KEY`. Respuestas no autenticadas devuelven `401 Unauthorized`.
+5. **Herramientas:** Se utilizó asistencia de IA para acelerar el scaffolding del proyecto, expresiones regulares complejas para parsing chileno y plantillas de pruebas.
+
+---
+
+## ⏱️ ¿Qué haría con más tiempo?
+
+- **Mecanismo de Trigger Manual:** Implementar un endpoint administrativo (ej. `POST /api/v1/ingesta`) protegido con rol de admin para disparar ingestas bajo demanda sin reiniciar la app.
+- **Detección de Cambios (Diffing):** Agregar una tabla de auditoría para registrar histórico de transiciones de estado de los proyectos entre ejecuciones sucesivas.
+- **Métricas:** Integrar Prometheus y OpenTelemetry para registrar métricas de tasa de fallos de fuentes externas y latencia por página.
