@@ -45,10 +45,7 @@ services:
       DATABASE_URL: "file:./data/dev.db"
       REJECTED_FILE_PATH: "./data/rejected.json"
     volumes:
-      - app-data:/usr/src/app/data
+      - ./app/data:/usr/src/app/data
     depends_on:
       mock-api:
         condition: service_healthy
-
-volumes:
-  app-data:
