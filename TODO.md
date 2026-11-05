@@ -1,98 +1,173 @@
-# Plan de Trabajo
+# 📋 Roadmap & Plan de Trabajo – Prueba Técnica CBC
 
-## Resumen
-
-Construir un proceso ETL de datos y una API con dos partes principales:
-
----
-
-### Fase 1: Entorno y Verificación Inicial
-
-- [x] **1.1. Configuración de repositorio inicial:** Clonar / copiar proyecto base y subir al nuevo repositorio remoto.
-- [x] **1.2. Probar la fuente externa (`mock-api`):**
-  - Copiar `.env.example` a `.env`.
-  - Levantar `mock-api` con Docker (`docker compose up --build mock-api`) o local con Python.
-  - Probar llamada con curl agregando el header `X-API-Key: dev-source-key`. Verificado respondiendo 112 items.
+> **Aclaración fundamental de Arquitectura:**  
+> **¿Dónde se limpian los datos?**  
+> ❌ **NO se limpian dentro de `GET /proyectos` ni en `GET /resumen`.** Si limpiaras los datos cuando un usuario consulta la API, tendrías que llamar en ese mismo instante a la fuente externa (que es lenta y falla con 429/500), haciendo la API lenta y propensa a caídas.  
+> ✅ **Se limpian ANTES, en un proceso previo llamado "Ingesta" (ETL).**  
+> Tu aplicación tiene **dos roles separados**:
+> 1. **Proceso de Ingesta (Segundo plano / Al arrancar):** Va a buscar los datos a la `mock-api`, los limpia, guarda los inválidos en `rejected.json` y guarda los válidos en tu base de datos SQLite.
+> 2. **Servidor API (Tus endpoints):** Cuando alguien llama a `GET /proyectos` o `GET /resumen`, tu API **únicamente consulta tu SQLite local** (donde todo ya está 100% limpio y sin duplicados) y responde al instante.
 
 ---
 
-### Fase 2: Configuración del Proyecto Propio
+## 🧭 Los Dos Roles de tu Aplicación (Separación Clara)
 
-- [x] **2.1. Elegir stack tecnológico y crear estructura base:**
-  - Creado en `app/` con NestJS, TypeScript y pnpm.
-  - Scripts y tests configurados y verificados.
-- [x] **2.2. Configuración de variables de entorno y Base de Datos:**
-  - Variables de entorno definidas (`PORT`, `API_KEY`, `SOURCE_BASE_URL`, `SOURCE_API_KEY`, `DATABASE_URL`, `REJECTED_FILE_PATH`).
-  - Prisma configurado con SQLite (`Project` model) y `PrismaModule` listo para inyección de dependencias.
-  - Soporte de configuración global en NestJS vía `@nestjs/config`.
-
----
-
-### Fase 3: Lógica de Normalización, Limpieza y Rechazos (Core de Negocio)
-
-- [ ] **3.1. Normalizadores de campos:**
-  - `id`: mayúsculas, sin espacios (`id_vacio`).
-  - `nombre` y `titular`: trim y limpieza de espacios redundantes (`nombre_vacio`).
-  - `monto`: parseo de formato chileno (`1.234,5 MM USD`, `US$ 2,5 millones`, `850000`) a millones USD (`monto_invalido`, `monto_negativo`).
-  - `fecha_ingreso`: parsear formatos (`AAAA-MM-DD`, `DD/MM/AAAA`, `DD-mmm-AAAA` con meses en español) a ISO 8601 (`fecha_invalida`).
-  - `region`: mapeo contra diccionario canónico y variantes romanas/regionales (`region_desconocida`).
-  - `estado`: mapeo a canónicos (`En evaluación`, `Aprobado`, `Rechazado`) sin importar mayúsculas/tildes (`estado_desconocido`).
-- [ ] **3.2. Manejo de duplicados y rechazados:**
-  - Regla de duplicados: mismo ID normalizado -> conservar el de `actualizado_en` más reciente.
-  - Generación/sobrescritura del archivo de rechazados (`rejected.json` o `rejected.csv`) con `id`, `nombre` y `motivo`.
-- [ ] **3.3. Tests unitarios de normalización:**
-  - Pruebas para casos borde de montos, fechas, regiones y estados según `CONTRATO.md`.
-
----
-
-### Fase 4: Proceso de Ingesta Robusta
-
-- [ ] **4.1. Cliente HTTP resiliente:**
-  - Implementar paginación completa (`page=1` hasta `total_pages`).
-  - Manejo de reintentos con backoff exponencial para `500` y lectura de cabecera `Retry-After` para `429`.
-  - Configurar timeouts.
-- [ ] **4.2. Flujo completo de ingesta:**
-  - Extraer datos de la mock-api -> Normalizar -> Separar válidos y rechazados -> Resolver duplicados -> Persistir en SQLite.
-  - Garantizar idempotencia (ejecutar dos veces seguidas no debe duplicar registros).
-  - Exponer mecanismo para disparar la ingesta (comando CLI o endpoint específico).
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ ROL A: PROCESO DE INGESTA (ETL)                                                        │
+│ Se ejecuta al arrancar el contenedor o mediante un comando/trigger.                   │
+│                                                                                        │
+│ 1. Cliente HTTP      ──> Consume las páginas de mock-api (con reintentos 429 y 500).  │
+│ 2. Normalizador      ──> Limpia fechas, montos, regiones, estados.                    │
+│ 3. Rechazos          ──> Si un registro es inválido, lo escribe en rejected.json.      │
+│ 4. Deduplicador      ──> Si hay IDs repetidos, conserva el más reciente.               │
+│ 5. Guardado          ──> Inserta o actualiza los proyectos limpios en SQLite.          │
+└──────────────────────────────────────────┬─────────────────────────────────────────────┘
+                                           │
+                                           ▼ Guarda datos limpios
+                                  [( Base de Datos SQLite )]
+                                           ▲
+                                           │ Solo lee de aquí
+┌──────────────────────────────────────────┴─────────────────────────────────────────────┐
+│ ROL B: SERVIDOR API REST                                                               │
+│ Responde a los clientes/evaluadores que consultan tu servicio.                         │
+│                                                                                        │
+│ 1. Guardia de Seguridad ──> Valida la cabecera X-API-Key (401 si falla).               │
+│ 2. GET /proyectos       ──> Lee de SQLite, filtra por región/estado/monto y pagina.    │
+│ 3. GET /resumen         ──> Lee de SQLite, agrupa y suma montos por región.            │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-### Fase 5: API REST Propia
+## 🗺️ Diagrama del Flujo Completo
 
-- [ ] **5.1. Middleware de autenticación:**
-  - Validar cabecera `X-API-Key` contra variable de entorno. Responder `401` si falla.
-- [ ] **5.2. Endpoint `GET /proyectos`:**
+```mermaid
+flowchart TD
+    subgraph ROL_A ["ROL A: Proceso de Ingesta (Se corre al inicio o vía trigger)"]
+        MockAPI["mock-api (:8001)<br/>(Falla con 429 / 500)"]
+        Cliente["1. Cliente HTTP Resiliente<br/>(Lee páginas 1 a N con reintentos)"]
+        Limpieza{"2. ¿Pasa validación?<br/>(id, nombre, monto, fecha, región, estado)"}
+        Rechazados[/"Archivo rejected.json<br/>(id, nombre, motivo)"/]
+        Deduplicador["3. Deduplicador<br/>(Mismo ID -> gana actualizado_en más reciente)"]
+        Guardar["4. Guardar en SQLite<br/>(dev.db)"]
+    end
+
+    subgraph ROL_B ["ROL B: Tus Endpoints API (Responden a usuarios)"]
+        Peticion["Petición HTTP entrante<br/>(:8000)"]
+        Auth{"¿X-API-Key válida?"}
+        Unauthorized["401 Unauthorized"]
+        EP1["GET /proyectos<br/>(Lee SQLite con filtros y paginación)"]
+        EP2["GET /resumen<br/>(Lee SQLite agrupando por región)"]
+    end
+
+    MockAPI --> Cliente
+    Cliente --> Limpieza
+    Limpieza -- "Inválido" --> Rechazados
+    Limpieza -- "Válido" --> Deduplicador
+    Deduplicador --> Guardar
+    Guardar --> DB[("SQLite: dev.db")]
+
+    Peticion --> Auth
+    Auth -- "No" --> Unauthorized
+    Auth -- "Sí" --> DB
+    DB --> EP1
+    DB --> EP2
+```
+
+---
+
+## 🧩 ¿Qué componentes de código programas exactamente?
+
+| Archivo / Componente | Qué hace | ¿En qué momento se usa? |
+| :--- | :--- | :--- |
+| **1. Módulo Normalizador (`cleaner.ts`)** | Funciones puras que reciben un registro sucio de texto y devuelven el dato tipado/limpio o el código de rechazo (`fecha_invalida`, `monto_invalido`, etc.). | Usado en la Ingesta. |
+| **2. Cliente Ingesta (`ingestion.service.ts`)** | Llama a `mock-api` con reintentos $\rightarrow$ llama al normalizador $\rightarrow$ genera `rejected.json` $\rightarrow$ guarda en SQLite. | Al iniciar el servidor o por comando. |
+| **3. Controlador API (`projects.controller.ts`)** | Expone `GET /proyectos` y `GET /resumen` leyendo directamente de SQLite. | Cada vez que un usuario hace una petición. |
+| **4. Guard de Autenticación (`api-key.guard.ts`)** | Compara el header `X-API-Key` contra la variable de entorno `API_KEY`. | En cada petición a la API. |
+
+---
+
+## 📌 Checklist Detallado por Etapas
+
+### ✅ Etapa 0: Entorno y Setup Base (Listo)
+- [x] **0.1. Mock API levantada:** Verificada con Docker en puerto 8001.
+- [x] **0.2. Backend inicializado:** Creado con NestJS + TypeScript en `app/`.
+- [x] **0.3. Base de Datos configurada:** Prisma ORM con modelo `Project` y SQLite listo.
+- [x] **0.4. Docker compose configurado:** Ambos servicios integrados con volumen para persistencia.
+
+---
+
+### ⏳ Etapa 1: Funciones de Limpieza y Normalización (Lógica Pura)
+> **Objetivo:** Escribir funciones que reciban el texto crudo y devuelvan el objeto limpio o lancen el motivo de rechazo exacto exigido por `CONTRATO.md`.
+
+- [x] **1.1. Limpiador de ID y Nombres:**
+  - `id`: Quitar espacios y pasar a mayúsculas (`P-0042`). Si queda vacío $\rightarrow$ rechazo `id_vacio`.
+  - `nombre`: Trim y quitar espacios dobles interiores. Si queda vacío $\rightarrow$ rechazo `nombre_vacio`.
+  - `titular`: Trim de espacios (puede quedar vacío, no rechaza).
+- [x] **1.2. Conversor de Montos a Millones USD (`monto_musd`):**
+  - `1.234,5 MM USD` $\rightarrow$ `1234.5`
+  - `US$ 2,5 millones` $\rightarrow$ `2.5`
+  - `850000` (sin unidad = dólares enteros) $\rightarrow$ `0.85`
+  - No numérico $\rightarrow$ `monto_invalido`. Si es $\le 0$ $\rightarrow$ `monto_negativo`.
+  - Guardar con máximo 3 decimales.
+- [x] **1.3. Conversor de Fechas a ISO (`AAAA-MM-DD`):**
+  - Formatos aceptados: `AAAA-MM-DD`, `DD/MM/AAAA` y `DD-mmm-AAAA` (meses en español: `ene`, `feb`, etc.).
+  - Fecha inexistente (ej. `31/02/2024`) $\rightarrow$ `fecha_invalida`.
+- [x] **1.4. Mapeador de Regiones:**
+  - Convierte variantes (romanos como `II Región` o `Región de Antofagasta`) al nombre oficial (`Antofagasta`).
+  - Si no existe en la lista oficial $\rightarrow$ `region_desconocida`.
+- [x] **1.5. Mapeador de Estados:**
+  - Unifica a `En evaluación`, `Aprobado` o `Rechazado` (insensible a mayúsculas y tildes).
+  - Cualquier otro valor $\rightarrow$ `estado_desconocido`.
+- [x] **1.6. Deduplicación y Escritor de Rechazos:**
+  - Misma ID: conservar únicamente el que tenga `actualizado_en` más reciente (los duplicados no son rechazados).
+  - Escribir registros inválidos en `rejected.json` con `{ id, nombre, motivo }`.
+- [x] **1.7. Tests Unitarios:**
+  - Probar con Vitest todos los casos borde de fechas, montos, estados, regiones, deduplicación y escritura de archivo.
+
+---
+
+### ⏳ Etapa 2: Proceso de Ingesta (El pipeline ETL)
+> **Objetivo:** El proceso que se conecta a la `mock-api`, maneja los errores de red, aplica la limpieza y guarda en SQLite.
+
+- [ ] **2.1. Cliente HTTP con reintentos:**
+  - Consultar paginado desde `page=1` hasta `total_pages`.
+  - Ante error `429`: leer cabecera `Retry-After` y pausar los segundos requeridos antes de reintentar.
+  - Ante error `500`: aplicar reintentos con backoff exponencial.
+- [ ] **2.2. Guardado Idempotente:**
+  - Persistir los proyectos limpios en SQLite.
+  - Asegurar que ejecutar la ingesta 2 o más veces seguidas deje la base de datos exactamente igual (sin registros duplicados).
+- [ ] **2.3. Disparador de Ingesta:**
+  - Configurar que la ingesta se ejecute automáticamente al levantar el servicio (onModuleInit) o mediante un comando/endpoint.
+
+---
+
+### ⏳ Etapa 3: Endpoints de la API REST
+> **Objetivo:** Exponer los datos ya limpios desde SQLite hacia el exterior.
+
+- [ ] **3.1. Autenticación (`X-API-Key`):**
+  - Validar cabecera contra la variable de entorno `API_KEY`. Responder `401` si no coincide.
+- [ ] **3.2. Endpoint `GET /proyectos`:**
+  - Consulta únicamente sobre la base de datos SQLite.
   - Filtros opcionales: `region`, `estado`, `monto_min`.
   - Paginación: `page` (default 1), `page_size` (default 20, max 100).
-  - Orden ascendente por `id`.
-  - Manejo de `400` ante parámetros inválidos.
-  - Formato exacto según contrato (`items`, `total`, `page`, `page_size`).
-- [ ] **5.3. Endpoint `GET /resumen`:**
-  - Agrupación por región: `region`, `cantidad`, `monto_total_musd`.
-- [ ] **5.4. Tests de integración para la API:**
-  - Probar endpoints, filtros, paginación y validación de `X-API-Key`.
+  - Orden: Siempre por `id` ascendente.
+  - Si mandan parámetros inválidos (ej. `monto_min=abc`) $\rightarrow$ responder `400 Bad Request`.
+  - Estructura exacta de respuesta: `{ items: [...], total, page, page_size }`.
+- [ ] **3.3. Endpoint `GET /resumen`:**
+  - Retornar agrupado por región: `[{ region: "Antofagasta", cantidad: 14, monto_total_musd: 3926.07 }, ...]`.
+- [ ] **3.4. Tests de integración:**
+  - Probar peticiones HTTP a los endpoints comprobando filtros, respuestas 200, 400 y 401.
 
 ---
 
-### Fase 6: Dockerización y Orquestación
-
-- [x] **6.1. Dockerfile del servicio:**
-  - Creado `Dockerfile` multi-stage optimizado para NestJS + Prisma en Node 20 Alpine.
-- [x] **6.2. Integración en `docker-compose.yml`:**
-  - Agregado servicio `app` dependiente del healthcheck de `mock-api`, volumen de persistencia para SQLite y variables de entorno.
-
----
-
-### Fase 7: Documentación y Entrega
-
-- [ ] **7.1. Documento `DISENO.md` (Parte 2):**
-  - Responder las 3 preguntas de arquitectura/diseño (40 fuentes, Azure, trade-offs a 2 días).
-- [ ] **7.2. Documento `README.md` (Parte 1):**
-  - Instrucciones claras de ejecución con Docker y sin Docker.
-  - Puertos, variables y claves de prueba.
-  - Explicación de cómo disparar la ingesta y dónde ver el archivo de rechazados.
-  - Justificación de DB, supuestos y mención de uso de herramientas/IA.
-- [ ] **7.3. Revisión final y entrega:**
-  - Verificar historial de commits.
-  - Validar accesos de lectura en GitHub para los evaluadores.
+### ⏳ Etapa 4: Documentación y Entrega Final
+- [x] **4.1. `DISENO.md` (Parte 2):** Respuestas de diseño y trade-offs listas.
+- [ ] **4.2. `README.md` (Parte 1):**
+  - Comandos para levantar (`docker compose up --build`).
+  - Variables de entorno, puertos y claves de prueba.
+  - Explicar cómo corre la ingesta y dónde queda `rejected.json`.
+  - Justificación de SQLite, supuestos y mención de herramientas de IA.
+- [ ] **4.3. Entrega en GitHub:**
+  - Dar permisos de lectura a `doyarce@cbc.cl` y `gleal@cbc.cl`.
