@@ -8,6 +8,7 @@ import {
   cleanRegion,
   cleanEstado,
   cleanRawProject,
+  deduplicateProjects,
 } from './cleaner.js';
 
 describe('ETL Cleaner - Reglas Básicas', () => {
@@ -272,6 +273,88 @@ describe('ETL Cleaner - Reglas Básicas', () => {
       if (!res6.success) {
         expect(res6.rejection.motivo).toBe('estado_desconocido');
       }
+    });
+  });
+
+  describe('deduplicateProjects', () => {
+    it('debe conservar una sola copia si dos registros son idénticos', () => {
+      const p1 = {
+        id: 'P-0082',
+        nombre: 'Proyecto Inmobiliario Salar Grande',
+        titular: 'Agrícola Valle Verde S.A.',
+        region: 'Los Lagos',
+        monto_musd: 0.78,
+        fecha_ingreso: '2024-12-13',
+        estado: 'Aprobado',
+        actualizado_en: new Date('2024-12-22T15:00:00Z'),
+      };
+      const p2 = { ...p1 };
+
+      const result = deduplicateProjects([p1, p2]);
+      expect(result).toHaveLength(1);
+      expect(result[0].id).toBe('P-0082');
+    });
+
+    it('debe conservar el registro con actualizado_en más reciente si difieren, sin importar el orden', () => {
+      const antiguo = {
+        id: 'P-0042',
+        nombre: 'Planta Solar Los Andes',
+        titular: 'Minera Andina S.A.',
+        region: 'Antofagasta',
+        monto_musd: 100,
+        fecha_ingreso: '2024-01-10',
+        estado: 'En evaluación',
+        actualizado_en: new Date('2024-01-10T10:00:00Z'),
+      };
+
+      const nuevo = {
+        id: 'P-0042',
+        nombre: 'Planta Solar Los Andes',
+        titular: 'Minera Andina S.A.',
+        region: 'Antofagasta',
+        monto_musd: 125.5,
+        fecha_ingreso: '2024-01-10',
+        estado: 'Aprobado',
+        actualizado_en: new Date('2024-03-15T12:00:00Z'), // Fecha más reciente
+      };
+
+      // Caso A: Llega primero el antiguo y luego el nuevo
+      const resA = deduplicateProjects([antiguo, nuevo]);
+      expect(resA).toHaveLength(1);
+      expect(resA[0].estado).toBe('Aprobado');
+      expect(resA[0].monto_musd).toBe(125.5);
+
+      // Caso B: Llega primero el nuevo y luego el antiguo
+      const resB = deduplicateProjects([nuevo, antiguo]);
+      expect(resB).toHaveLength(1);
+      expect(resB[0].estado).toBe('Aprobado');
+      expect(resB[0].monto_musd).toBe(125.5);
+    });
+
+    it('debe mantener proyectos con IDs diferentes separados', () => {
+      const p1 = {
+        id: 'P-0001',
+        nombre: 'Proyecto 1',
+        titular: null,
+        region: 'Maule',
+        monto_musd: 10,
+        fecha_ingreso: '2024-01-01',
+        estado: 'Aprobado',
+        actualizado_en: new Date('2024-01-01T00:00:00Z'),
+      };
+      const p2 = {
+        id: 'P-0002',
+        nombre: 'Proyecto 2',
+        titular: null,
+        region: 'Atacama',
+        monto_musd: 20,
+        fecha_ingreso: '2024-01-02',
+        estado: 'En evaluación',
+        actualizado_en: new Date('2024-01-02T00:00:00Z'),
+      };
+
+      const result = deduplicateProjects([p1, p2]);
+      expect(result).toHaveLength(2);
     });
   });
 });
