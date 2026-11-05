@@ -131,15 +131,15 @@ flowchart TD
 ### ⏳ Etapa 2: Proceso de Ingesta (El pipeline ETL)
 > **Objetivo:** El proceso que se conecta a la `mock-api`, maneja los errores de red, aplica la limpieza y guarda en SQLite.
 
-- [ ] **2.1. Cliente HTTP con reintentos:**
+- [x] **2.1. Cliente HTTP con reintentos:**
   - Consultar paginado desde `page=1` hasta `total_pages`.
   - Ante error `429`: leer cabecera `Retry-After` y pausar los segundos requeridos antes de reintentar.
   - Ante error `500`: aplicar reintentos con backoff exponencial.
-- [ ] **2.2. Guardado Idempotente:**
-  - Persistir los proyectos limpios en SQLite.
+- [x] **2.2. Guardado Idempotente:**
+  - Persistir los proyectos limpios en SQLite mediante `upsert`.
   - Asegurar que ejecutar la ingesta 2 o más veces seguidas deje la base de datos exactamente igual (sin registros duplicados).
-- [ ] **2.3. Disparador de Ingesta:**
-  - Configurar que la ingesta se ejecute automáticamente al levantar el servicio (onModuleInit) o mediante un comando/endpoint.
+- [x] **2.3. Disparador de Ingesta:**
+  - Configurado para ejecutarse automáticamente al levantar el servicio (`onModuleInit` asíncrono con control por variable `AUTO_INGEST_ON_STARTUP`).
 
 ---
 
