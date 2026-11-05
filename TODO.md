@@ -146,7 +146,7 @@ flowchart TD
 ### ⏳ Etapa 3: Endpoints de la API REST
 > **Objetivo:** Exponer los datos ya limpios desde SQLite hacia el exterior.
 
-- [ ] **3.1. Autenticación (`X-API-Key`):**
+- [x] **3.1. Autenticación (`X-API-Key`):**
   - Validar cabecera contra la variable de entorno `API_KEY`. Responder `401` si no coincide.
 - [ ] **3.2. Endpoint `GET /proyectos`:**
   - Consulta únicamente sobre la base de datos SQLite.
