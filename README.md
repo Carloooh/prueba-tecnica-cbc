@@ -1,38 +1,118 @@
-# Prueba técnica – repositorio base
+# Prueba Técnica – Servicio de Seguimiento de Proyectos de Inversión
 
-Empieza por `ENUNCIADO.md` y luego lee `CONTRATO.md`. Este repositorio trae lo necesario para trabajar sin montar la fuente de datos tú mismo/a:
+Servicio backend desarrollado con **NestJS (TypeScript)** que ingesta proyectos desde una API externa (`mock-api`), normaliza y valida sus datos, descarta y documenta registros inválidos, resuelve duplicados quedándose con la versión más reciente, persiste los datos limpios en **SQLite (mediante Prisma ORM)** y los expone a través de una API REST protegida por API Key.
 
+---
+
+## 🚀 Requisitos Previos
+
+- [Docker](https://www.docker.com/) y Docker Compose (recomendado para ejecución completa).
+- [Node.js](https://nodejs.org/) v20+ y [pnpm](https://pnpm.io/) (para desarrollo local sin Docker).
+
+---
+
+## 🛠️ Variables de Entorno
+
+Crea un archivo `.env` en la raíz copiando `.env.example`:
+
+```bash
+cp .env.example .env
 ```
-.
-├── ENUNCIADO.md         # qué debes hacer, qué entregar y las reglas de la prueba
-├── CONTRATO.md          # fuente, reglas de limpieza y forma de tu API
-├── docker-compose.yml   # hoy levanta solo el mock-api; agrega aquí tu servicio
-├── .env.example
-└── mock-api/            # fuente externa simulada (no necesitas modificarla)
+
+| Variable | Descripción | Valor por Defecto |
+| --- | --- | --- |
+| `PORT` | Puerto donde escucha el servicio NestJS | `8000` |
+| `API_KEY` | Clave para autenticarse en **nuestra API** (`X-API-Key`) | `dev-api-key` |
+| `SOURCE_BASE_URL` | URL base de la fuente externa | `http://mock-api:8000` (Docker) / `http://localhost:8001` (Local) |
+| `SOURCE_API_KEY` | Clave requerida por la fuente externa | `dev-source-key` |
+| `DATABASE_URL` | Conexión a la base de datos SQLite | `file:./data/dev.db` |
+| `REJECTED_FILE_PATH` | Ruta del archivo de registros descartados | `./data/rejected.json` |
+
+---
+
+## 🐳 Ejecución con Docker Compose (Un solo comando)
+
+Para levantar tanto la fuente de datos (`mock-api`) como nuestro servicio (`app`):
+
+```bash
+docker compose up --build
 ```
 
-## Cómo empezar
+- **Mock API**: disponible en `http://localhost:8001`
+- **Nuestra API**: disponible en `http://localhost:8000`
 
-1. Copia este contenido a un repositorio nuevo tuyo (será el que nos entregues).
-2. Levanta la fuente simulada:
+---
 
+## 💻 Ejecución en Modo Desarrollo (Local)
+
+1. **Instalar dependencias:**
    ```bash
-   docker compose up --build mock-api
+   cd app
+   pnpm install
    ```
 
-   Sin Docker: `python mock-api/server.py` (queda en `http://localhost:8000`; con `PORT=8001` replicas el puerto de compose).
-
-3. Pruébala:
-
+2. **Generar cliente Prisma y base de datos:**
    ```bash
-   curl -H "X-API-Key: dev-source-key" "http://localhost:8001/api/v1/proyectos?page=1&page_size=5"
+   pnpm prisma generate
+   pnpm prisma db push
    ```
 
-   Es normal que algunas llamadas respondan `429` o `500`: es parte del ejercicio. Para depurar sin errores, `MOCK_ERROR_RATE=0`.
+3. **Iniciar el servicio:**
+   ```bash
+   pnpm run start:dev
+   ```
 
-4. Construye tu solución (en una carpeta nueva, por ejemplo `app/`), súmala a `docker-compose.yml` y documenta en tu `README.md` cómo ejecutarla.
+---
 
-## Qué no debes hacer
+## 🔄 Disparo de la Ingesta de Datos
 
-- No subas credenciales reales. Las claves del ejemplo (`dev-source-key`) son de desarrollo.
-- No modifiques `mock-api/` ni sus datos: revisaremos tu entrega contra la fuente original.
+La ingesta puede ejecutarse de las siguientes formas:
+- **Al iniciar el contenedor:** Ejecuta la sincronización automática una vez que la `mock-api` responde healthy.
+- **Vía endpoint administrativo / CLI:** *(Se detallará en la implementación de la Fase 4)*.
+
+---
+
+## 📂 Archivo de Rechazados
+
+Los registros con inconsistencias o formatos inválidos no entran a la base de datos y se escriben en:
+- Ruta: `app/data/rejected.json` (o `./data/rejected.json` montado en volumen).
+- Cada ejecución sobrescribe este archivo, reflejando el estado de la última ingesta.
+
+---
+
+## 🧪 Pruebas Automatizadas
+
+```bash
+cd app
+pnpm test          # Pruebas unitarias
+pnpm test:cov      # Cobertura de pruebas
+```
+
+---
+
+## ⚖️ Justificaciones y Decisiones Técnicas
+
+### 1. Framework: NestJS (TypeScript)
+- **Modularidad y Arquitectura Empresarial:** Arquitectura desacoplada basada en controladores, servicios, inyección de dependencias y módulos.
+- **Tipado Fuerte:** TypeScript previene errores de contrato en tiempo de compilación.
+- **Ecosistema y Testing:** Soporte nativo para validación de DTOs, filtros de excepciones globales y testing ágil con Vitest/Jest.
+
+### 2. Base de Datos: SQLite
+- **Simplicidad y Portabilidad:** Base de datos basada en un único archivo, ideal para el volumen de datos del ejercicio (~100-200 proyectos) sin sobrecargar la infraestructura con contenedores pesados de bases de datos externas.
+- **Idempotencia y Rendimiento:** Excelente soporte de transacciones ACID y velocidad de lectura para consultas agrupadas (`/resumen`) y paginadas (`/proyectos`).
+
+### 3. ORM: Prisma
+- **Type-safety de Extremo a Extremo:** Genera tipos TypeScript exactos a partir del schema, reduciendo desalineaciones con el contrato.
+- **Migraciones Claras y Simples:** `prisma db push` permite inicializar y sincronizar esquemas SQLite rápidamente dentro de Docker sin configuraciones engorrosas.
+- **Mantenibilidad:** Facilidad para realizar queries filtradas, paginadas y agregaciones (`groupBy`) para el endpoint `/resumen`.
+
+---
+
+## 🤖 Uso de Herramientas de IA y Supuestos
+
+- **Herramientas:** Uso de IA asistencial para acelerar scaffolding de código, validaciones de expresiones regulares complejas (montos chilenos y fechas en español) y plantillas de pruebas unitarias.
+- **Supuestos:**
+  - El monto se almacena en base de datos como número flotante redondeado a un máximo de 3 decimales en millones de USD (`musd`).
+  - Duplicados con la misma fecha de `actualizado_en` toman la última instancia procesada.
+  - La autenticación de nuestra API rechaza con `401 Unauthorized` si el header `X-API-Key` no coincide con la variable `API_KEY`.
+

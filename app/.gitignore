@@ -1,0 +1,23 @@
+# Archivos de entorno
+.env
+*.env
+
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Compilación y builds
+dist/
+*.tsbuildinfo
+
+# Base de datos y datos locales de ingesta
+data/
+*.db
+*.db-journal
+
+# Logs y pruebas
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+coverage/
+.vitest/

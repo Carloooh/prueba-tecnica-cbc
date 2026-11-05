@@ -1,0 +1,24 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Project {
+  id             String   @id
+  nombre         String
+  titular        String?
+  region         String
+  monto_musd     Float
+  fecha_ingreso  String   // Formato ISO AAAA-MM-DD
+  estado         String
+  actualizado_en DateTime // Almacenado como DateTime para comparaciones precisas en deduplicación
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([region])
+  @@index([estado])
+}

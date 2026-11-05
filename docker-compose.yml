@@ -32,3 +32,23 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+
+  app:
+    build: ./app
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      PORT: 8000
+      API_KEY: ${API_KEY:-dev-api-key}
+      SOURCE_BASE_URL: http://mock-api:8000
+      SOURCE_API_KEY: ${SOURCE_API_KEY:-dev-source-key}
+      DATABASE_URL: "file:./data/dev.db"
+      REJECTED_FILE_PATH: "./data/rejected.json"
+    volumes:
+      - app-data:/usr/src/app/data
+    depends_on:
+      mock-api:
+        condition: service_healthy
+
+volumes:
+  app-data:
