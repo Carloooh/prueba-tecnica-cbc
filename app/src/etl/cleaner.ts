@@ -394,3 +394,31 @@ export function cleanRawProject(raw: RawProject): CleanResult {
   };
 }
 
+/**
+ Limpieza de duplicados:
+  - El mismo proyecto puede llegar más de una vez con el ID escrito distinto (P-0042, p-0042).
+  - Si las filas son idénticas, queda una sola.
+  - Si difieren, gana la de `actualizado_en` más reciente, sin importar el orden en que llegaron.
+  - Los duplicados NO son rechazados: son un solo proyecto válido.
+ */
+export function deduplicateProjects(projects: CleanProject[]): CleanProject[] {
+  const map = new Map<string, CleanProject>();
+
+  for (const project of projects) {
+    const existing = map.get(project.id);
+
+    if (!existing) {
+      map.set(project.id, project);
+    } else {
+      // Si ya existe el proyecto, se elije la fecha de actualizado_en más reciente
+      const existingTime = existing.actualizado_en.getTime();
+      const newTime = project.actualizado_en.getTime();
+      if (newTime > existingTime) {
+        map.set(project.id, project);
+      }
+    }
+  }
+
+  return Array.from(map.values());
+}
+
