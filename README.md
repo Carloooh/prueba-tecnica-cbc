@@ -130,7 +130,7 @@ Soy consciente de que subir archivos de entorno (`.env`) al repositorio y expone
 
 ### Fuentes de Información y Uso de IA
 
-- **Documentación oficial:** Documentación de NestJS (Guards, Controllers, Config), Prisma ORM (agrupaciones y schema SQLite) y especificación de Docker Compose.
+- **Documentación oficial:** Documentación de NestJS (Guards, Controllers, Config), Prisma ORM (agrupaciones y schema SQLite) y especificación de Docker Compose, Documentación Azure para poder responder la pregunta 2 en DISENO.md.
 - **Uso de IA asistencial:** Utilicé herramientas de IA como apoyo para el scaffolding inicial del proyecto, afinación de expresiones regulares para formatos de fecha en español / montos chilenos, y generación de casos borde en las plantillas de tests. Toda la lógica fue validada y ajustada contra los requerimientos de `CONTRATO.md`.
 
 ---
