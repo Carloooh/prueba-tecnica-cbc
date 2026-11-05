@@ -9,6 +9,7 @@ Servicio backend desarrollado en **NestJS (TypeScript)** con persistencia en **S
 Requisito: tener Docker y Docker Compose instalados.
 
 1. **Crear archivo de variables de entorno:**
+
    ```bash
    cp .env.example .env
    ```
@@ -34,6 +35,7 @@ Al iniciar el contenedor de la aplicación, el proceso de ingesta se ejecuta aut
 4. **Paso 4/4 (Persistencia Idempotente):** Guarda los registros limpios en SQLite usando `upsert`. Si ejecutas la ingesta múltiples veces, no se generan duplicados ni se alteran los datos válidos.
 
 > **Dónde revisar los resultados:**
+>
 > - **Archivo de rechazados:** `app/data/rejected.json` (se sobrescribe en cada corrida para reflejar el estado actual).
 > - **Base de datos SQLite:** `app/data/dev.db`.
 
@@ -67,3 +69,7 @@ Cubren casos borde de normalización de montos, validación de fechas reales en 
 - **Mecanismo de Trigger Manual:** Implementar un endpoint administrativo (ej. `POST /api/v1/ingesta`) protegido con rol de admin para disparar ingestas bajo demanda sin reiniciar la app.
 - **Detección de Cambios (Diffing):** Agregar una tabla de auditoría para registrar histórico de transiciones de estado de los proyectos entre ejecuciones sucesivas.
 - **Métricas:** Integrar Prometheus y OpenTelemetry para registrar métricas de tasa de fallos de fuentes externas y latencia por página.
+
+podría añadirse el endpoint para consultar un proyecto por id o nombre, más específico en vez de traer todos,
+seguridad de conexión mediante credenciales/token
+Swagger para documentar la api y pruebas en interfaz
