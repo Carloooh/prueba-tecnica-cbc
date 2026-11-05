@@ -1,0 +1,34 @@
+# Repositorio base de la prueba técnica.
+#
+# Hoy solo levanta la fuente simulada (mock-api):
+#     docker compose up --build mock-api
+# y queda disponible en http://localhost:8001 (dentro de la red de compose: http://mock-api:8000).
+#
+# Tu entrega debe poder levantarse con UN comando (`docker compose up --build`):
+# agrega abajo el servicio de tu solución. Ejemplo orientativo (ajústalo a tu proyecto):
+#
+#   app:
+#     build: ./app
+#     ports: ["8000:8000"]
+#     environment:
+#       SOURCE_BASE_URL: http://mock-api:8000
+#       SOURCE_API_KEY: ${SOURCE_API_KEY:-dev-source-key}
+#       API_KEY: ${API_KEY:-dev-api-key}     # la clave de TU API; nunca en el código
+#     depends_on:
+#       mock-api:
+#         condition: service_healthy
+
+services:
+  mock-api:
+    build: ./mock-api
+    ports:
+      - "8001:8000"
+    environment:
+      SOURCE_API_KEY: ${SOURCE_API_KEY:-dev-source-key}
+      MOCK_ERROR_RATE: ${MOCK_ERROR_RATE:-0.15}
+      MOCK_SEED: ${MOCK_SEED:-42}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 5

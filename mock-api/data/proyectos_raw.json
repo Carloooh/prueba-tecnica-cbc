@@ -1,0 +1,1122 @@
+[
+ {
+  "id": " P-0039 ",
+  "nombre": "CENTRO DE DATOS SALAR GRANDE",
+  "titular": "Hidrógeno Sur SpA",
+  "region": "METROPOLITANA DE SANTIAGO ",
+  "monto": "US$ 50,3 millones",
+  "fecha_ingreso": "08-sep-2023",
+  "estado": "En evaluación ",
+  "actualizado_en": "2023-10-04T16:30:00Z"
+ },
+ {
+  "id": "P-0056",
+  "nombre": "Terminal Portuario Mirador",
+  "titular": " Inmobiliaria Horizonte S.A.  ",
+  "region": "Región de Aysén",
+  "monto": "237,0 MM USD",
+  "fecha_ingreso": "29-ago-2026",
+  "estado": "Suspendido",
+  "actualizado_en": "2026-09-04T18:15:00Z"
+ },
+ {
+  "id": "P-0071",
+  "nombre": "  Centro de Datos Punta Norte ",
+  "titular": "Energías del Norte SpA",
+  "region": "Los Lagos",
+  "monto": "610000",
+  "fecha_ingreso": "06-dic-2022",
+  "estado": "En evaluación ",
+  "actualizado_en": "2023-01-03T12:30:00Z"
+ },
+ {
+  "id": "P-0047",
+  "nombre": "Línea de Transmisión Las Palmas  ",
+  "titular": "Hidrógeno Sur SpA",
+  "region": "Región Metropolitana",
+  "monto": "31,5 MM USD",
+  "fecha_ingreso": "09-ago-2023",
+  "estado": "aprobado",
+  "actualizado_en": "2023-08-30T11:30:00Z"
+ },
+ {
+  "id": " P-0070 ",
+  "nombre": "Central Hidroeléctrica Pampa Sur",
+  "titular": "transmisora central sa",
+  "region": "Maule",
+  "monto": "1.807,5 MM USD",
+  "fecha_ingreso": "08/11/2025",
+  "estado": "aprobado",
+  "actualizado_en": "2025-12-18T11:30:00Z"
+ },
+ {
+  "id": "P-0082",
+  "nombre": "Proyecto Inmobiliario Salar Grande",
+  "titular": "Agrícola Valle Verde S.A.",
+  "region": "X Región",
+  "monto": "780000",
+  "fecha_ingreso": "13-dic-2024",
+  "estado": "Aprobado",
+  "actualizado_en": "2024-12-22T15:00:00Z"
+ },
+ {
+  "id": "p-0051",
+  "nombre": "Proyecto Inmobiliario Los Andes",
+  "titular": "Puerto del Pacífico S.A.",
+  "region": "Los Lagos",
+  "monto": "265,4 MM USD",
+  "fecha_ingreso": "21-jun-2022",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2022-06-29T18:45:00Z"
+ },
+ {
+  "id": "P-0002",
+  "nombre": "  Parque Eólico Altiplano ",
+  "titular": "puerto del pacífico sa",
+  "region": "ANTOFAGASTA ",
+  "monto": "810000",
+  "fecha_ingreso": "2026-01-06",
+  "estado": "aprobado",
+  "actualizado_en": "2026-01-20T18:45:00Z"
+ },
+ {
+  "id": "P-0052",
+  "nombre": "LÍNEA DE TRANSMISIÓN MIRADOR",
+  "titular": "Energías del Norte SpA",
+  "region": "Atacama",
+  "monto": "135,3 MM USD",
+  "fecha_ingreso": "16-feb-2024",
+  "estado": "en evaluacion",
+  "actualizado_en": "2024-03-03T12:45:00Z"
+ },
+ {
+  "id": "P-0063",
+  "nombre": "Planta de Hidrógeno Verde Cordillera  ",
+  "titular": "Grupo Austral S.A.",
+  "region": "Región de Coquimbo",
+  "monto": "US$ 1.425,5 millones",
+  "fecha_ingreso": "10-dic-2025",
+  "estado": "En evaluación",
+  "actualizado_en": "2025-12-29T15:30:00Z"
+ },
+ {
+  "id": "P-0029",
+  "nombre": "  Línea de Transmisión Pampa Sur ",
+  "titular": "minera andina sa",
+  "region": "Metropolitana de Santiago",
+  "monto": "US$ 1.031,2 millones",
+  "fecha_ingreso": "22-jul-2025",
+  "estado": "en evaluacion",
+  "actualizado_en": "2025-08-07T12:45:00Z"
+ },
+ {
+  "id": "P-0087",
+  "nombre": "Proyecto Minero Río Claro",
+  "titular": "Constructora Pacífico Ltda.",
+  "region": "Región de Antofagasta",
+  "monto": "153,3 MM USD",
+  "fecha_ingreso": "31/10/2025",
+  "estado": "rechazado",
+  "actualizado_en": "2025-11-20T11:45:00Z"
+ },
+ {
+  "id": "P-0074",
+  "nombre": "PROYECTO MINERO SALAR GRANDE",
+  "titular": "Energías del Norte SpA",
+  "region": "COQUIMBO ",
+  "monto": "265,2 MM USD",
+  "fecha_ingreso": "31-mar-2024",
+  "estado": "En evaluación",
+  "actualizado_en": "2024-04-29T16:00:00Z"
+ },
+ {
+  "id": "P-0033",
+  "nombre": "  Planta de Hidrógeno Verde Quebrada Honda ",
+  "titular": " Minera Andina S.A.  ",
+  "region": "MAGALLANES ",
+  "monto": "US$ 3.269,9 millones",
+  "fecha_ingreso": "30/04/2023",
+  "estado": "en evaluacion",
+  "actualizado_en": "2023-05-26T10:15:00Z"
+ },
+ {
+  "id": "P-0011",
+  "nombre": "Proyecto Inmobiliario Horizonte",
+  "titular": "grupo austral sa",
+  "region": "Región Metropolitana",
+  "monto": "US$ 3.068,4 millones",
+  "fecha_ingreso": "2022-01-24",
+  "estado": "Aprobado",
+  "actualizado_en": "2022-02-27T18:00:00Z"
+ },
+ {
+  "id": "P-0001",
+  "nombre": "   ",
+  "titular": " Agrícola Valle Verde S.A.  ",
+  "region": "XV Región",
+  "monto": "US$ 89,7 millones",
+  "fecha_ingreso": "17-feb-2026",
+  "estado": "En evaluación",
+  "actualizado_en": "2026-03-26T09:00:00Z"
+ },
+ {
+  "id": "P-0017",
+  "nombre": "Planta Desalinizadora Los Andes",
+  "titular": " Energías del Norte SpA  ",
+  "region": "METROPOLITANA DE SANTIAGO ",
+  "monto": "88,5 MM USD",
+  "fecha_ingreso": "26-may-2022",
+  "estado": "Rechazado",
+  "actualizado_en": "2022-06-09T18:00:00Z"
+ },
+ {
+  "id": "P-0094",
+  "nombre": "Central Hidroeléctrica Mirador",
+  "titular": "Datacenter Chile SpA",
+  "region": "XII Región",
+  "monto": "840000",
+  "fecha_ingreso": "08/06/2026",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2026-06-24T14:00:00Z"
+ },
+ {
+  "id": "P-0077",
+  "nombre": "PARQUE EÓLICO HORIZONTE",
+  "titular": "puerto del pacífico sa",
+  "region": "Región de Aysén",
+  "monto": "US$ 62,0 millones",
+  "fecha_ingreso": "2026-01-07",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2026-01-20T12:30:00Z"
+ },
+ {
+  "id": "p-0004",
+  "nombre": "Planta Desalinizadora La Cumbre  ",
+  "titular": "Transmisora Central S.A.",
+  "region": "Biobío",
+  "monto": "US$ 2.062,3 millones",
+  "fecha_ingreso": "15-feb-2024",
+  "estado": "APROBADO",
+  "actualizado_en": "2024-03-26T09:30:00Z"
+ },
+ {
+  "id": "P-0095",
+  "nombre": "Proyecto Inmobiliario Mirador",
+  "titular": "datacenter chile spa",
+  "region": "IX Región",
+  "monto": "US$ 735,9 millones",
+  "fecha_ingreso": "24-abr-2023",
+  "estado": "En evaluación",
+  "actualizado_en": "2023-06-02T15:00:00Z"
+ },
+ {
+  "id": "P-0028",
+  "nombre": "  Planta de Hidrógeno Verde Pampa Sur ",
+  "titular": " Constructora Pacífico Ltda.  ",
+  "region": "METROPOLITANA DE SANTIAGO ",
+  "monto": "720000",
+  "fecha_ingreso": "17/01/2022",
+  "estado": "en evaluacion",
+  "actualizado_en": "2022-01-23T18:30:00Z"
+ },
+ {
+  "id": "",
+  "nombre": "TERMINAL PORTUARIO EL DESIERTO",
+  "titular": " Inmobiliaria Horizonte S.A.  ",
+  "region": "Región de Antofagasta",
+  "monto": "156,5 MM USD",
+  "fecha_ingreso": "25/05/2026",
+  "estado": "Rechazado ",
+  "actualizado_en": "2026-06-21T15:30:00Z"
+ },
+ {
+  "id": "P-0045",
+  "nombre": "  Proyecto Agroindustrial Horizonte ",
+  "titular": "Datacenter Chile SpA",
+  "region": "TARAPACÁ ",
+  "monto": "339,4 MM USD",
+  "fecha_ingreso": "2024-07-23",
+  "estado": "APROBADO",
+  "actualizado_en": "2024-08-25T10:45:00Z"
+ },
+ {
+  "id": "P-0076",
+  "nombre": "PARQUE FOTOVOLTAICO LAS PALMAS",
+  "titular": "Minera Andina S.A.",
+  "region": "Región de Antofagasta",
+  "monto": "870000",
+  "fecha_ingreso": "2023-05-06",
+  "estado": "Aprobado ",
+  "actualizado_en": "2023-06-10T10:30:00Z"
+ },
+ {
+  "id": "P-0077",
+  "nombre": "Parque Eólico Horizonte",
+  "titular": " Puerto del Pacífico S.A.  ",
+  "region": "Aysén",
+  "monto": "US$ 62,0 millones",
+  "fecha_ingreso": "2026-01-07",
+  "estado": "Rechazado ",
+  "actualizado_en": "2026-02-02T12:30:00Z"
+ },
+ {
+  "id": "P-0038",
+  "nombre": "  Terminal Portuario Altiplano ",
+  "titular": "Agrícola Valle Verde S.A.",
+  "region": "III Región",
+  "monto": "405,2 MM USD",
+  "fecha_ingreso": "2026-07-10",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2026-08-02T16:15:00Z"
+ },
+ {
+  "id": "p-0007",
+  "nombre": "PROYECTO AGROINDUSTRIAL COSTA AZUL",
+  "titular": " Minera Andina S.A.  ",
+  "region": "Región de Antofagasta",
+  "monto": "395,8 MM USD",
+  "fecha_ingreso": "03/08/2025",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2025-08-23T16:15:00Z"
+ },
+ {
+  "id": "P-0080",
+  "nombre": "Planta Desalinizadora Salar Grande  ",
+  "titular": "Agrícola Valle Verde S.A.",
+  "region": "Región Metropolitana",
+  "monto": "US$ 182,4 millones",
+  "fecha_ingreso": "22-oct-2023",
+  "estado": "en evaluación",
+  "actualizado_en": "2023-11-27T11:15:00Z"
+ },
+ {
+  "id": "P-0024",
+  "nombre": "Parque Fotovoltaico Río Claro  ",
+  "titular": "Agrícola Valle Verde S.A.",
+  "region": "I Región",
+  "monto": "140000",
+  "fecha_ingreso": "21/05/2022",
+  "estado": "En evaluación ",
+  "actualizado_en": "2022-06-05T17:00:00Z"
+ },
+ {
+  "id": "p-0009",
+  "nombre": "CENTRO DE DATOS HORIZONTE",
+  "titular": "Agrícola Valle Verde S.A.",
+  "region": "II Región",
+  "monto": "298,1 MM USD",
+  "fecha_ingreso": "08/01/2025",
+  "estado": "en evaluación",
+  "actualizado_en": "2025-02-14T12:45:00Z"
+ },
+ {
+  "id": "P-0012",
+  "nombre": "Planta Desalinizadora Valle Alto",
+  "titular": "energías del norte spa",
+  "region": "Atacama",
+  "monto": "1,8 MM USD",
+  "fecha_ingreso": "18/01/2026",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2026-02-11T12:15:00Z"
+ },
+ {
+  "id": "P-0048",
+  "nombre": "Proyecto Minero Costa Azul",
+  "titular": " Puerto del Pacífico S.A.  ",
+  "region": "Coquimbo",
+  "monto": "86,0 MM USD",
+  "fecha_ingreso": "2024-04-29",
+  "estado": "en evaluacion",
+  "actualizado_en": "2024-06-02T14:30:00Z"
+ },
+ {
+  "id": " P-0089 ",
+  "nombre": "PROYECTO INMOBILIARIO PAMPA SUR",
+  "titular": "Puerto del Pacífico S.A.",
+  "region": "VI Región",
+  "monto": "US$ 100,4 millones",
+  "fecha_ingreso": "2026-09-28",
+  "estado": "En evaluación",
+  "actualizado_en": "2026-10-22T12:15:00Z"
+ },
+ {
+  "id": "P-0030",
+  "nombre": "  Terminal Portuario La Cumbre ",
+  "titular": "inmobiliaria horizonte sa",
+  "region": "TARAPACÁ ",
+  "monto": "52,8 MM USD",
+  "fecha_ingreso": "21/06/2023",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2023-07-26T10:45:00Z"
+ },
+ {
+  "id": "P-0012",
+  "nombre": "Planta Desalinizadora Valle Alto",
+  "titular": "Energías del Norte SpA",
+  "region": "Región de Atacama",
+  "monto": "1,8 MM USD",
+  "fecha_ingreso": "18/01/2026",
+  "estado": "Aprobado",
+  "actualizado_en": "2026-02-19T12:15:00Z"
+ },
+ {
+  "id": "p-0006",
+  "nombre": "Centro de Datos Cordillera",
+  "titular": "solaris chile spa",
+  "region": "Antofagasta",
+  "monto": "770000",
+  "fecha_ingreso": "2025-12-08",
+  "estado": "En evaluación ",
+  "actualizado_en": "2026-01-15T18:00:00Z"
+ },
+ {
+  "id": "P-0040",
+  "nombre": "Línea de Transmisión Punta Norte",
+  "titular": "Datacenter Chile SpA",
+  "region": "ANTOFAGASTA ",
+  "monto": "US$ 152,0 millones",
+  "fecha_ingreso": "13/03/2026",
+  "estado": "Aprobado",
+  "actualizado_en": "2026-04-07T10:30:00Z"
+ },
+ {
+  "id": "P-0093",
+  "nombre": "Proyecto Minero La Cumbre",
+  "titular": " Energías del Norte SpA  ",
+  "region": "X Región",
+  "monto": "3.398,9 MM USD",
+  "fecha_ingreso": "28-ago-2023",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2023-09-26T13:00:00Z"
+ },
+ {
+  "id": " P-0043 ",
+  "nombre": "  Central Hidroeléctrica Punta Norte ",
+  "titular": "Solaris Chile SpA",
+  "region": "XV Región",
+  "monto": "330000",
+  "fecha_ingreso": "2026-04-23",
+  "estado": "aprobado",
+  "actualizado_en": "2026-05-19T09:45:00Z"
+ },
+ {
+  "id": "P-0010",
+  "nombre": "  Proyecto Minero Las Palmas ",
+  "titular": " Energías del Norte SpA  ",
+  "region": "Región de Antofagasta",
+  "monto": "US$ 44,3 millones",
+  "fecha_ingreso": "09-jul-2025",
+  "estado": "En evaluación ",
+  "actualizado_en": "2025-08-16T10:45:00Z"
+ },
+ {
+  "id": "P-0055",
+  "nombre": "Proyecto Agroindustrial Valle Alto",
+  "titular": "solaris chile spa",
+  "region": "VIII Región",
+  "monto": "660000",
+  "fecha_ingreso": "2025-03-31",
+  "estado": "RECHAZADO",
+  "actualizado_en": "2025-05-06T08:30:00Z"
+ },
+ {
+  "id": " P-0026 ",
+  "nombre": "Planta Desalinizadora Costa Azul  ",
+  "titular": "puerto del pacífico sa",
+  "region": "Atacama",
+  "monto": "258,4 MM USD",
+  "fecha_ingreso": "25/07/2024",
+  "estado": "Aprobado",
+  "actualizado_en": "2024-07-25T13:00:00Z"
+ },
+ {
+  "id": " P-0091 ",
+  "nombre": "  Centro de Datos El Desierto ",
+  "titular": "Solaris Chile SpA",
+  "region": "Los Lagos",
+  "monto": "2.981,8 MM USD",
+  "fecha_ingreso": "10/08/2023",
+  "estado": "en evaluación",
+  "actualizado_en": "2023-08-24T11:30:00Z"
+ },
+ {
+  "id": "P-0035",
+  "nombre": "  Central Hidroeléctrica Altiplano ",
+  "titular": "Solaris Chile SpA",
+  "region": "LA ARAUCANÍA ",
+  "monto": "720000",
+  "fecha_ingreso": "17-jun-2026",
+  "estado": "en evaluacion",
+  "actualizado_en": "2026-06-18T11:15:00Z"
+ },
+ {
+  "id": "P-0037",
+  "nombre": "Línea de Transmisión Río Claro",
+  "titular": "Agrícola Valle Verde S.A.",
+  "region": "Región Metropolitana",
+  "monto": "518,6 MM USD",
+  "fecha_ingreso": "06/05/2025",
+  "estado": "aprobado",
+  "actualizado_en": "2025-05-26T14:30:00Z"
+ },
+ {
+  "id": "P-0081",
+  "nombre": "Planta Desalinizadora Las Palmas  ",
+  "titular": "",
+  "region": "Maule",
+  "monto": "1.596,8 MM USD",
+  "fecha_ingreso": "2025-09-21",
+  "estado": "En evaluación",
+  "actualizado_en": "2025-10-22T18:15:00Z"
+ },
+ {
+  "id": " P-0087 ",
+  "nombre": "Proyecto Minero Río Claro",
+  "titular": "constructora pacífico ltda",
+  "region": "Antofagasta",
+  "monto": "153,3 MM USD",
+  "fecha_ingreso": "31/10/2025",
+  "estado": "en evaluacion",
+  "actualizado_en": "2025-12-07T11:45:00Z"
+ },
+ {
+  "id": "P-0060",
+  "nombre": "Parque Fotovoltaico Mirador",
+  "titular": "Hidrógeno Sur SpA",
+  "region": "Atacama",
+  "monto": "130,3 MM USD",
+  "fecha_ingreso": "25/09/2024",
+  "estado": "En evaluación ",
+  "actualizado_en": "2024-10-11T11:30:00Z"
+ },
+ {
+  "id": "p-0075",
+  "nombre": "CENTRAL HIDROELÉCTRICA CORDILLERA",
+  "titular": "Constructora Pacífico Ltda.",
+  "region": "METROPOLITANA DE SANTIAGO ",
+  "monto": "177,1 MM USD",
+  "fecha_ingreso": "31/02/2024",
+  "estado": "Rechazado",
+  "actualizado_en": "2022-05-21T11:30:00Z"
+ },
+ {
+  "id": "P-0069",
+  "nombre": "  Línea de Transmisión Cerro Verde ",
+  "titular": "Puerto del Pacífico S.A.",
+  "region": "II Región",
+  "monto": "30,5 MM USD",
+  "fecha_ingreso": "2022-01-06",
+  "estado": "En evaluación ",
+  "actualizado_en": "2022-02-13T14:45:00Z"
+ },
+ {
+  "id": "p-0031",
+  "nombre": "Planta Solar Valle Alto",
+  "titular": "Datacenter Chile SpA",
+  "region": "Tarapacá",
+  "monto": "940000",
+  "fecha_ingreso": "22/01/2025",
+  "estado": "En evaluación ",
+  "actualizado_en": "2025-02-28T08:30:00Z"
+ },
+ {
+  "id": " P-0021 ",
+  "nombre": "Planta de Hidrógeno Verde Valle Alto  ",
+  "titular": "Puerto del Pacífico S.A.",
+  "region": "Región de Tarapacá",
+  "monto": "US$ 2.991,7 millones",
+  "fecha_ingreso": "11-jul-2022",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2022-08-06T11:15:00Z"
+ },
+ {
+  "id": "P-0048",
+  "nombre": "Proyecto Minero Costa Azul  ",
+  "titular": "Puerto del Pacífico S.A.",
+  "region": "COQUIMBO ",
+  "monto": "86,0 MM USD",
+  "fecha_ingreso": "2024-04-29",
+  "estado": "RECHAZADO",
+  "actualizado_en": "2024-05-13T14:30:00Z"
+ },
+ {
+  "id": "P-0096",
+  "nombre": "  Centro de Datos Cerro Verde ",
+  "titular": "Minera Andina S.A.",
+  "region": "VI Región",
+  "monto": "280,6 MM USD",
+  "fecha_ingreso": "2025-08-22",
+  "estado": "Rechazado ",
+  "actualizado_en": "2025-08-30T14:00:00Z"
+ },
+ {
+  "id": "P-0083",
+  "nombre": "  Proyecto Minero Cerro Verde ",
+  "titular": "Solaris Chile SpA",
+  "region": "V Región",
+  "monto": "US$ 1.449,5 millones",
+  "fecha_ingreso": "19/11/2025",
+  "estado": "aprobado",
+  "actualizado_en": "2025-12-10T14:00:00Z"
+ },
+ {
+  "id": "P-0045",
+  "nombre": "  Proyecto Agroindustrial Horizonte ",
+  "titular": "Datacenter Chile SpA",
+  "region": "TARAPACÁ ",
+  "monto": "339,4 MM USD",
+  "fecha_ingreso": "2024-07-23",
+  "estado": "APROBADO",
+  "actualizado_en": "2024-08-25T10:45:00Z"
+ },
+ {
+  "id": "P-0014",
+  "nombre": "PARQUE EÓLICO CORDILLERA",
+  "titular": "Inmobiliaria Horizonte S.A.",
+  "region": "Los Lagos",
+  "monto": "500000",
+  "fecha_ingreso": "29/04/2022",
+  "estado": "En evaluación",
+  "actualizado_en": "2022-05-04T11:00:00Z"
+ },
+ {
+  "id": "P-0066",
+  "nombre": "Parque Fotovoltaico Valle Alto  ",
+  "titular": "grupo austral sa",
+  "region": "X Región",
+  "monto": "188,0 MM USD",
+  "fecha_ingreso": "21/06/2024",
+  "estado": "RECHAZADO",
+  "actualizado_en": "2024-06-24T13:15:00Z"
+ },
+ {
+  "id": " P-0098 ",
+  "nombre": "Terminal Portuario Valle Alto  ",
+  "titular": "puerto del pacífico sa",
+  "region": "La Araucanía",
+  "monto": "US$ 375,7 millones",
+  "fecha_ingreso": "27/07/2023",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2023-08-09T08:30:00Z"
+ },
+ {
+  "id": "P-0050",
+  "nombre": "Parque Fotovoltaico Costa Azul",
+  "titular": "puerto del pacífico sa",
+  "region": "Región Desconocida",
+  "monto": "155,8 MM USD",
+  "fecha_ingreso": "01-oct-2025",
+  "estado": "RECHAZADO",
+  "actualizado_en": "2025-10-11T18:45:00Z"
+ },
+ {
+  "id": "P-0058",
+  "nombre": "  Parque Eólico Quebrada Honda ",
+  "titular": "inmobiliaria horizonte sa",
+  "region": "Región de Magallanes",
+  "monto": "110000",
+  "fecha_ingreso": "19/12/2025",
+  "estado": "aprobado",
+  "actualizado_en": "2025-12-30T10:45:00Z"
+ },
+ {
+  "id": "p-0092",
+  "nombre": "  Línea de Transmisión Horizonte ",
+  "titular": "",
+  "region": "Tarapacá",
+  "monto": "510000",
+  "fecha_ingreso": "28-ago-2023",
+  "estado": "En evaluación ",
+  "actualizado_en": "2023-09-08T13:45:00Z"
+ },
+ {
+  "id": "P-0086",
+  "nombre": "Planta Solar El Desierto  ",
+  "titular": "Agrícola Valle Verde S.A.",
+  "region": "Región de Atacama",
+  "monto": "-500000",
+  "fecha_ingreso": "2024-06-01",
+  "estado": "aprobado",
+  "actualizado_en": "2024-07-04T10:15:00Z"
+ },
+ {
+  "id": "P-0036",
+  "nombre": "Parque Eólico La Cumbre  ",
+  "titular": "Energías del Norte SpA",
+  "region": "ATACAMA ",
+  "monto": "272,0 MM USD",
+  "fecha_ingreso": "24-sep-2026",
+  "estado": "aprobado",
+  "actualizado_en": "2026-09-25T16:30:00Z"
+ },
+ {
+  "id": "P-0078",
+  "nombre": "Central Hidroeléctrica Horizonte",
+  "titular": " Agrícola Valle Verde S.A.  ",
+  "region": "Región Metropolitana",
+  "monto": "368,8 MM USD",
+  "fecha_ingreso": "2024-11-06",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2024-11-23T10:00:00Z"
+ },
+ {
+  "id": " P-0024 ",
+  "nombre": "Parque Fotovoltaico Río Claro  ",
+  "titular": "Agrícola Valle Verde S.A.",
+  "region": "I Región",
+  "monto": "140000",
+  "fecha_ingreso": "21/05/2022",
+  "estado": "En evaluación ",
+  "actualizado_en": "2022-06-05T17:00:00Z"
+ },
+ {
+  "id": "p-0016",
+  "nombre": "Proyecto Agroindustrial Altiplano",
+  "titular": "Inversiones Cordillera S.A.",
+  "region": "MAULE ",
+  "monto": "N/D",
+  "fecha_ingreso": "04-feb-2024",
+  "estado": "en evaluacion",
+  "actualizado_en": "2024-02-11T15:45:00Z"
+ },
+ {
+  "id": "p-0064",
+  "nombre": "  Proyecto Agroindustrial Las Palmas ",
+  "titular": "Grupo Austral S.A.",
+  "region": "ATACAMA ",
+  "monto": "304,2 MM USD",
+  "fecha_ingreso": "2025-05-07",
+  "estado": "en evaluación",
+  "actualizado_en": "2025-05-19T12:00:00Z"
+ },
+ {
+  "id": "p-0013",
+  "nombre": "Línea de Transmisión Altiplano",
+  "titular": "hidrógeno sur spa",
+  "region": "ANTOFAGASTA ",
+  "monto": "2.072,1 MM USD",
+  "fecha_ingreso": "14-may-2026",
+  "estado": "En evaluación ",
+  "actualizado_en": "2026-06-21T16:00:00Z"
+ },
+ {
+  "id": "P-0073",
+  "nombre": "Planta de Hidrógeno Verde Horizonte",
+  "titular": "Hidrógeno Sur SpA",
+  "region": "LOS LAGOS ",
+  "monto": "US$ 234,3 millones",
+  "fecha_ingreso": "2025-07-24",
+  "estado": "en evaluacion",
+  "actualizado_en": "2025-08-23T15:00:00Z"
+ },
+ {
+  "id": "P-0034",
+  "nombre": "Planta Desalinizadora Quebrada Honda",
+  "titular": "minera andina sa",
+  "region": "Biobío",
+  "monto": "2.913,3 MM USD",
+  "fecha_ingreso": "01-jul-2023",
+  "estado": "Aprobado ",
+  "actualizado_en": "2023-07-25T10:00:00Z"
+ },
+ {
+  "id": "P-0046",
+  "nombre": "PARQUE FOTOVOLTAICO QUEBRADA HONDA",
+  "titular": " Inversiones Cordillera S.A.  ",
+  "region": "La Araucanía",
+  "monto": "650000",
+  "fecha_ingreso": "2026-03-04",
+  "estado": "Aprobado",
+  "actualizado_en": "2026-03-20T15:45:00Z"
+ },
+ {
+  "id": "P-0044",
+  "nombre": "PROYECTO AGROINDUSTRIAL MIRADOR",
+  "titular": "Constructora Pacífico Ltda.",
+  "region": "Región de Valparaíso",
+  "monto": "US$ 262,6 millones",
+  "fecha_ingreso": "2022-01-12",
+  "estado": "Aprobado",
+  "actualizado_en": "2022-01-26T09:45:00Z"
+ },
+ {
+  "id": "p-0059",
+  "nombre": "  Centro de Datos La Cumbre ",
+  "titular": "Inversiones Cordillera S.A.",
+  "region": "METROPOLITANA DE SANTIAGO ",
+  "monto": "US$ 2.801,4 millones",
+  "fecha_ingreso": "10-ago-2024",
+  "estado": "aprobado",
+  "actualizado_en": "2024-08-30T14:30:00Z"
+ },
+ {
+  "id": "P-0023",
+  "nombre": "  Planta de Hidrógeno Verde Las Palmas ",
+  "titular": "Minera Andina S.A.",
+  "region": "Antofagasta",
+  "monto": "387,5 MM USD",
+  "fecha_ingreso": "2025-04-01",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2025-04-21T16:00:00Z"
+ },
+ {
+  "id": "P-0097",
+  "nombre": "Parque Eólico Valle Alto  ",
+  "titular": " Inmobiliaria Horizonte S.A.  ",
+  "region": "II Región",
+  "monto": "220000",
+  "fecha_ingreso": "30-ene-2024",
+  "estado": "APROBADO",
+  "actualizado_en": "2024-03-07T18:45:00Z"
+ },
+ {
+  "id": "p-0099",
+  "nombre": "Planta Solar Mirador  ",
+  "titular": " Solaris Chile SpA  ",
+  "region": "Atacama",
+  "monto": "US$ 3.341,9 millones",
+  "fecha_ingreso": "15-ago-2026",
+  "estado": "aprobado",
+  "actualizado_en": "2026-08-28T15:00:00Z"
+ },
+ {
+  "id": "P-0068",
+  "nombre": "Terminal Portuario Costa Azul",
+  "titular": "",
+  "region": "BIOBÍO ",
+  "monto": "US$ 363,4 millones",
+  "fecha_ingreso": "01/09/2023",
+  "estado": "Aprobado ",
+  "actualizado_en": "2023-09-20T17:45:00Z"
+ },
+ {
+  "id": "p-0062",
+  "nombre": "Centro de Datos Las Palmas",
+  "titular": "Hidrógeno Sur SpA",
+  "region": "Región de Valparaíso",
+  "monto": "118,0 MM USD",
+  "fecha_ingreso": "08/04/2024",
+  "estado": "En evaluación",
+  "actualizado_en": "2024-05-15T11:30:00Z"
+ },
+ {
+  "id": "P-0094",
+  "nombre": "Central Hidroeléctrica Mirador",
+  "titular": " Datacenter Chile SpA  ",
+  "region": "Magallanes",
+  "monto": "840000",
+  "fecha_ingreso": "08/06/2026",
+  "estado": "rechazado",
+  "actualizado_en": "2026-06-09T14:00:00Z"
+ },
+ {
+  "id": "P-0042",
+  "nombre": "PROYECTO AGROINDUSTRIAL RÍO CLARO",
+  "titular": "Solaris Chile SpA",
+  "region": "O'HIGGINS ",
+  "monto": "US$ 265,7 millones",
+  "fecha_ingreso": "22/06/2025",
+  "estado": "En evaluación",
+  "actualizado_en": "2025-07-07T13:00:00Z"
+ },
+ {
+  "id": "P-0072",
+  "nombre": "Parque Fotovoltaico Cerro Verde",
+  "titular": "Inversiones Cordillera S.A.",
+  "region": "Región Metropolitana",
+  "monto": "2.677,1 MM USD",
+  "fecha_ingreso": "21-may-2025",
+  "estado": "rechazado",
+  "actualizado_en": "2025-05-26T12:00:00Z"
+ },
+ {
+  "id": "P-0084",
+  "nombre": "Terminal Portuario Salar Grande",
+  "titular": " Solaris Chile SpA  ",
+  "region": "METROPOLITANA DE SANTIAGO ",
+  "monto": "1.912,6 MM USD",
+  "fecha_ingreso": "13/01/2025",
+  "estado": "aprobado",
+  "actualizado_en": "2025-01-28T08:00:00Z"
+ },
+ {
+  "id": "P-0067",
+  "nombre": "Parque Eólico Mirador  ",
+  "titular": "inversiones cordillera sa",
+  "region": "Región de Valparaíso",
+  "monto": "US$ 274,7 millones",
+  "fecha_ingreso": "07/11/2022",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2022-11-12T10:30:00Z"
+ },
+ {
+  "id": "P-0018",
+  "nombre": "  Planta Desalinizadora Cerro Verde ",
+  "titular": "puerto del pacífico sa",
+  "region": "VALPARAÍSO ",
+  "monto": "194,4 MM USD",
+  "fecha_ingreso": "2025-01-09",
+  "estado": "Aprobado ",
+  "actualizado_en": "2025-01-24T10:45:00Z"
+ },
+ {
+  "id": "P-0008",
+  "nombre": "Planta Solar Salar Grande",
+  "titular": "agrícola valle verde sa",
+  "region": "Coquimbo",
+  "monto": "US$ 365,3 millones",
+  "fecha_ingreso": "07-mar-2025",
+  "estado": "Aprobado",
+  "actualizado_en": "2025-04-07T13:15:00Z"
+ },
+ {
+  "id": "P-0061",
+  "nombre": "  Proyecto Inmobiliario La Cumbre ",
+  "titular": "inversiones cordillera sa",
+  "region": "METROPOLITANA DE SANTIAGO ",
+  "monto": "280000",
+  "fecha_ingreso": "10-may-2023",
+  "estado": "APROBADO",
+  "actualizado_en": "2023-06-14T14:45:00Z"
+ },
+ {
+  "id": "P-0035",
+  "nombre": "  Central Hidroeléctrica Altiplano ",
+  "titular": "Solaris Chile SpA",
+  "region": "LA ARAUCANÍA ",
+  "monto": "720000",
+  "fecha_ingreso": "17-jun-2026",
+  "estado": "en evaluacion",
+  "actualizado_en": "2026-06-18T11:15:00Z"
+ },
+ {
+  "id": "P-0079",
+  "nombre": "Planta de Hidrógeno Verde La Cumbre",
+  "titular": "puerto del pacífico sa",
+  "region": "Región de La Araucanía",
+  "monto": "710000",
+  "fecha_ingreso": "2025-04-17",
+  "estado": "APROBADO",
+  "actualizado_en": "2025-04-26T17:45:00Z"
+ },
+ {
+  "id": " P-0065 ",
+  "nombre": "Proyecto Minero Pampa Sur",
+  "titular": "solaris chile spa",
+  "region": "ARICA Y PARINACOTA ",
+  "monto": "910000",
+  "fecha_ingreso": "22-abr-2022",
+  "estado": "APROBADO",
+  "actualizado_en": "2022-04-30T16:30:00Z"
+ },
+ {
+  "id": "p-0082",
+  "nombre": "Proyecto Inmobiliario Salar Grande",
+  "titular": "Agrícola Valle Verde S.A.",
+  "region": "X Región",
+  "monto": "780000",
+  "fecha_ingreso": "13-dic-2024",
+  "estado": "Aprobado",
+  "actualizado_en": "2024-12-22T15:00:00Z"
+ },
+ {
+  "id": "P-0085",
+  "nombre": "  Línea de Transmisión Costa Azul ",
+  "titular": "Inmobiliaria Horizonte S.A.",
+  "region": "Región de Ñuble",
+  "monto": "39,8 MM USD",
+  "fecha_ingreso": "21-jul-2025",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2025-07-31T09:45:00Z"
+ },
+ {
+  "id": "P-0027",
+  "nombre": "Proyecto Inmobiliario Valle Alto  ",
+  "titular": "Grupo Austral S.A.",
+  "region": "Tarapacá",
+  "monto": "480000",
+  "fecha_ingreso": "2023-12-16",
+  "estado": "en evaluacion",
+  "actualizado_en": "2024-01-08T09:15:00Z"
+ },
+ {
+  "id": "P-0053",
+  "nombre": "  Proyecto Agroindustrial El Desierto ",
+  "titular": "Inversiones Cordillera S.A.",
+  "region": "Región de Magallanes",
+  "monto": "370000",
+  "fecha_ingreso": "2025-13-40",
+  "estado": "En evaluación",
+  "actualizado_en": "2026-05-20T18:00:00Z"
+ },
+ {
+  "id": "P-0020",
+  "nombre": "Parque Eólico Costa Azul",
+  "titular": "Energías del Norte SpA",
+  "region": "Antofagasta",
+  "monto": "N/D",
+  "fecha_ingreso": "2023-01-11",
+  "estado": "en evaluacion",
+  "actualizado_en": "2023-01-26T12:45:00Z"
+ },
+ {
+  "id": "P-0054",
+  "nombre": "Planta Solar Punta Norte  ",
+  "titular": " Constructora Pacífico Ltda.  ",
+  "region": "ATACAMA ",
+  "monto": "46,2 MM USD",
+  "fecha_ingreso": "23-mar-2023",
+  "estado": "aprobado",
+  "actualizado_en": "2023-04-15T15:30:00Z"
+ },
+ {
+  "id": "P-0041",
+  "nombre": "Central Hidroeléctrica Quebrada Honda  ",
+  "titular": "Puerto del Pacífico S.A.",
+  "region": "Biobío",
+  "monto": "US$ 129,2 millones",
+  "fecha_ingreso": "23/06/2024",
+  "estado": "Aprobado",
+  "actualizado_en": "2024-07-25T15:15:00Z"
+ },
+ {
+  "id": " P-0057 ",
+  "nombre": "  Proyecto Inmobiliario El Desierto ",
+  "titular": "",
+  "region": "ATACAMA ",
+  "monto": "740000",
+  "fecha_ingreso": "02/11/2024",
+  "estado": "APROBADO",
+  "actualizado_en": "2024-11-02T18:30:00Z"
+ },
+ {
+  "id": "P-0003",
+  "nombre": "  Planta Solar Río Claro ",
+  "titular": "Agrícola Valle Verde S.A.",
+  "region": "Región de Maule",
+  "monto": "62,6 MM USD",
+  "fecha_ingreso": "2026-04-13",
+  "estado": "EN EVALUACIÓN",
+  "actualizado_en": "2026-04-18T13:00:00Z"
+ },
+ {
+  "id": "P-0025",
+  "nombre": "PROYECTO INMOBILIARIO COSTA AZUL",
+  "titular": "Inversiones Cordillera S.A.",
+  "region": "Región Metropolitana",
+  "monto": "US$ 33,3 millones",
+  "fecha_ingreso": "08-sep-2025",
+  "estado": "aprobado",
+  "actualizado_en": "2025-09-24T17:30:00Z"
+ },
+ {
+  "id": "P-0015",
+  "nombre": "  Parque Eólico Punta Norte ",
+  "titular": "Datacenter Chile SpA",
+  "region": "II Región",
+  "monto": "US$ 220,1 millones",
+  "fecha_ingreso": "27-jun-2023",
+  "estado": "aprobado",
+  "actualizado_en": "2023-07-10T16:45:00Z"
+ },
+ {
+  "id": " P-0090 ",
+  "nombre": "Terminal Portuario Cordillera",
+  "titular": "minera andina sa",
+  "region": "METROPOLITANA DE SANTIAGO ",
+  "monto": "690000",
+  "fecha_ingreso": "2026-08-27",
+  "estado": "Aprobado",
+  "actualizado_en": "2026-09-13T18:45:00Z"
+ },
+ {
+  "id": "P-0091",
+  "nombre": "  Centro de Datos El Desierto ",
+  "titular": "Solaris Chile SpA",
+  "region": "Los Lagos",
+  "monto": "2.981,8 MM USD",
+  "fecha_ingreso": "10/08/2023",
+  "estado": "en evaluación",
+  "actualizado_en": "2023-08-24T11:30:00Z"
+ },
+ {
+  "id": "P-0074",
+  "nombre": "PROYECTO MINERO SALAR GRANDE",
+  "titular": "Energías del Norte SpA",
+  "region": "COQUIMBO ",
+  "monto": "265,2 MM USD",
+  "fecha_ingreso": "31-mar-2024",
+  "estado": "En evaluación",
+  "actualizado_en": "2024-04-29T16:00:00Z"
+ },
+ {
+  "id": "P-0005",
+  "nombre": "  Planta Desalinizadora Altiplano ",
+  "titular": "Agrícola Valle Verde S.A.",
+  "region": "Región de Maule",
+  "monto": "91,5 MM USD",
+  "fecha_ingreso": "2023-08-16",
+  "estado": "en evaluación",
+  "actualizado_en": "2023-08-22T09:15:00Z"
+ },
+ {
+  "id": "P-0032",
+  "nombre": "Proyecto Minero El Desierto",
+  "titular": "Solaris Chile SpA",
+  "region": "Atacama",
+  "monto": "2.868,0 MM USD",
+  "fecha_ingreso": "23-mar-2022",
+  "estado": "en evaluacion",
+  "actualizado_en": "2022-04-07T13:15:00Z"
+ },
+ {
+  "id": "P-0088",
+  "nombre": "Parque Fotovoltaico La Cumbre",
+  "titular": "Puerto del Pacífico S.A.",
+  "region": "Región de O'Higgins",
+  "monto": "580000",
+  "fecha_ingreso": "2023-08-13",
+  "estado": "rechazado",
+  "actualizado_en": "2023-08-17T18:15:00Z"
+ },
+ {
+  "id": "P-0019",
+  "nombre": "  Central Hidroeléctrica Valle Alto ",
+  "titular": " Agrícola Valle Verde S.A.  ",
+  "region": "ANTOFAGASTA ",
+  "monto": "US$ 169,7 millones",
+  "fecha_ingreso": "2024-08-14",
+  "estado": "Aprobado",
+  "actualizado_en": "2024-08-17T08:00:00Z"
+ },
+ {
+  "id": " P-0049 ",
+  "nombre": "Terminal Portuario Los Andes",
+  "titular": "agrícola valle verde sa",
+  "region": "XIV Región",
+  "monto": "US$ 1.579,2 millones",
+  "fecha_ingreso": "13-ene-2022",
+  "estado": "Aprobado ",
+  "actualizado_en": "2022-02-06T13:30:00Z"
+ },
+ {
+  "id": "P-0100",
+  "nombre": "Proyecto Minero Altiplano",
+  "titular": "Transmisora Central S.A.",
+  "region": "TARAPACÁ ",
+  "monto": "1.042,2 MM USD",
+  "fecha_ingreso": "19-mar-2023",
+  "estado": "En evaluación ",
+  "actualizado_en": "2023-03-28T11:30:00Z"
+ },
+ {
+  "id": "P-0049",
+  "nombre": "Terminal Portuario Los Andes",
+  "titular": " Agrícola Valle Verde S.A.  ",
+  "region": "LOS RÍOS ",
+  "monto": "US$ 1.579,2 millones",
+  "fecha_ingreso": "13-ene-2022",
+  "estado": "en evaluacion",
+  "actualizado_en": "2022-01-27T13:30:00Z"
+ }
+]
