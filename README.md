@@ -118,7 +118,15 @@ pnpm test:cov      # Cobertura de pruebas
 ## 🤖 Uso de Herramientas de IA y Supuestos
 
 - **Herramientas:** Uso de IA asistencial para acelerar scaffolding de código, validaciones de expresiones regulares complejas (montos chilenos y fechas en español) y plantillas de pruebas unitarias.
-- **Supuestos:**
-  - El monto se almacena en base de datos como número flotante redondeado a un máximo de 3 decimales en millones de USD (`musd`).
-  - Duplicados con la misma fecha de `actualizado_en` toman la última instancia procesada.
-  - La autenticación de nuestra API rechaza con `401 Unauthorized` si el header `X-API-Key` no coincide con la variable `API_KEY`.
+- **Supuestos y Decisiones de Diseño:**
+  - **Identificador (`id`):** Los IDs llegan como strings tipo `P-0042`, pero con variaciones de minúsculas (`p-0042`), espacios al inicio o final (`' P-0039 '`), o vacíos (`""`). Se limpian aplicando `trim().toUpperCase()`. Si un ID queda vacío, se rechaza inmediatamente con `id_vacio`.
+  - **Montos:** Se procesan tanto el formato chileno con coma (`1.234,5 MM USD`), palabras como `millones` (`US$ 2,5 millones`), como dólares enteros sin unidad (`850000` -> `0.85 MM USD`). Los valores se redondean a un máximo de 3 decimales (`monto_musd`). Valores $\le 0$ son clasificados como `monto_negativo` y textos no numéricos (`N/D`, `a convenir`) como `monto_invalido`.
+  - **Fechas:** Se admiten los formatos `AAAA-MM-DD`, `DD/MM/AAAA` (día primero) y `DD-mmm-AAAA` (meses en español). Se valida contra el calendario astronómico (incluyendo años bisiestos para el 29 de febrero); fechas inexistentes como `31/02/2024` o meses > 12 se rechazan como `fecha_invalida`.
+  - **Regiones y Estados:** Se mapean insensible a mayúsculas, tildes, números romanos y apóstrofes (`O'Higgins`, `Biobío`, `II Región`). Valores no contemplados se rechazan como `region_desconocida` o `estado_desconocido`.
+  - **Deduplicación:** Si un ID limpio llega más de una vez (incluso en distintas páginas o formatos de mayúsculas originales):
+    - Si son idénticos, queda una sola fila.
+    - Si difieren, **gana el registro con `actualizado_en` más reciente** (comparando `Date.getTime()`), sin importar el orden de llegada.
+    - Si tienen exactamente el mismo timestamp, se conserva la versión más reciente procesada.
+    - Los duplicados no se consideran rechazados.
+  - **Archivo de Rechazados:** Se genera un archivo JSON en `data/rejected.json` con los registros inválidos (`id`, `nombre`, `motivo`) que se sobrescribe en cada ingesta.
+  - **Autenticación:** La API rechaza con `401 Unauthorized` si la cabecera `X-API-Key` no coincide con la variable de entorno `API_KEY`.
