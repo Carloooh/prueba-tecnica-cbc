@@ -148,17 +148,17 @@ flowchart TD
 
 - [x] **3.1. Autenticación (`X-API-Key`):**
   - Validar cabecera contra la variable de entorno `API_KEY`. Responder `401` si no coincide.
-- [ ] **3.2. Endpoint `GET /proyectos`:**
+- [x] **3.2. Endpoint `GET /proyectos`:**
   - Consulta únicamente sobre la base de datos SQLite.
-  - Filtros opcionales: `region`, `estado`, `monto_min`.
+  - Filtros opcionales: `region` (canónico), `estado` (canónico), `monto_min` (monto mínimo inclusivo).
   - Paginación: `page` (default 1), `page_size` (default 20, max 100).
   - Orden: Siempre por `id` ascendente.
-  - Si mandan parámetros inválidos (ej. `monto_min=abc`) $\rightarrow$ responder `400 Bad Request`.
+  - Si mandan parámetros inválidos (ej. `monto_min=abc`, `region` no canónica, `estado` desconocido) $\rightarrow$ responder `400 Bad Request`.
   - Estructura exacta de respuesta: `{ items: [...], total, page, page_size }`.
-- [ ] **3.3. Endpoint `GET /resumen`:**
+- [x] **3.3. Endpoint `GET /resumen`:**
   - Retornar agrupado por región: `[{ region: "Antofagasta", cantidad: 14, monto_total_musd: 3926.07 }, ...]`.
-- [ ] **3.4. Tests de integración:**
-  - Probar peticiones HTTP a los endpoints comprobando filtros, respuestas 200, 400 y 401.
+- [x] **3.4. Tests de integración y e2e:**
+  - Probar peticiones HTTP a los endpoints comprobando filtros, paginación, respuestas 200, 400 y 401 (`pnpm test:e2e`).
 
 ---
 
