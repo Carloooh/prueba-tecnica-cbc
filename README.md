@@ -126,7 +126,7 @@ Las pruebas cubren:
 
 ### Aclaración sobre Variables de Entorno y Credenciales
 
-Soy consciente de que subir archivos de entorno (`.env`) al repositorio es una mala práctica de seguridad que nunca debe realizarse en proyectos reales. Los archivos `.env` reales se mantienen ignorados en `.gitignore`. Sin embargo, los archivos `.env.example` incluidos contienen las claves de desarrollo (`dev-source-key`, `dev-api-key`) que fueron provistas directamente en el enunciado de la prueba técnica. Dado que son credenciales falsas de prueba y no pertenecen a un entorno productivo ni a servicios externos reales, se proporcionan únicamente para facilitar la evaluación y cumplir con el requisito de que el proyecto levante sin fricciones.
+Soy consciente de que subir archivos de entorno (`.env`) al repositorio y exponer variables directamente es una mala práctica y un fallo de seguridad crítico que nunca debe realizarse en proyectos reales. Los archivos `.env` reales se mantienen ignorados en `.gitignore`. Sin embargo, los archivos `.env.example` incluidos contienen las claves de desarrollo (`dev-source-key`, `dev-api-key`) que fueron provistas directamente en el enunciado de la prueba técnica. Dado que son credenciales falsas de prueba y no pertenecen a un entorno productivo ni a servicios externos reales, se proporcionan únicamente para facilitar la evaluación y cumplir con el requisito de que el proyecto levante sin fricciones.
 
 ### Fuentes de Información y Uso de IA
 
