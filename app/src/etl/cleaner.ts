@@ -1,4 +1,4 @@
-import { RawProject, CleanResult, CleanProject, RejectedRecord, RejectReason } from './types.js';
+import { RawProject, CleanResult, CleanProject, RejectReason } from './types.js';
 
 
 // Limpieza de ID, quitar espacios y pasar a mayúsculas, que no esté vacío.

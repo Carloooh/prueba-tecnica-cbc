@@ -3,7 +3,6 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import {
   GetProjectsQueryDto,
   PaginatedProjectsResponse,
-  ProjectItemDto,
   RegionSummaryDto,
 } from './dto/project.dto.js';
 

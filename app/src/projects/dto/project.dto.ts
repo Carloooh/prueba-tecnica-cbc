@@ -32,3 +32,20 @@ export interface RegionSummaryDto {
   cantidad: number;
   monto_total_musd: number;
 }
+
+//Respuesta del endpoint administrativo POST /ingesta
+export interface TriggerIngestionResponseDto {
+  mensaje: string;
+  total_descargados: number;
+  total_validos: number;
+  total_rechazados: number;
+  proyectos_unicos_guardados: number;
+  nuevos_detectados: number;
+  cambios_estado_detectados: number;
+  cambios_estado: Array<{
+    id: string;
+    nombre: string;
+    estado_anterior: string;
+    estado_nuevo: string;
+  }>;
+}

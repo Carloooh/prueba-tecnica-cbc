@@ -44,6 +44,7 @@ services:
       SOURCE_API_KEY: ${SOURCE_API_KEY:-dev-source-key}
       DATABASE_URL: "file:../data/dev.db"
       REJECTED_FILE_PATH: "./data/rejected.json"
+      CHANGES_FILE_PATH: "./data/changes.json"
     volumes:
       - ./app/data:/usr/src/app/data
     depends_on:
