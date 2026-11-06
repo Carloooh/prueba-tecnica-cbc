@@ -1,4 +1,4 @@
-# Prueba Técnica CBC – Seguimiento de Proyectos de Inversión
+# Prueba Técnica CBC
 
 Servicio backend desarrollado en **NestJS (TypeScript)** con persistencia en **SQLite (Prisma ORM)**. El proyecto se encarga de extraer proyectos desde una API externa (`mock-api`), normalizar los datos según las reglas de negocio, registrar los descartados, resolver duplicados y exponer la información limpia mediante una API REST protegida por API Key.
 
