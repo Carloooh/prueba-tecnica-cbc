@@ -17,7 +17,7 @@ cd prueba-tecnica-cbc
 
 Requisito: tener Docker y Docker Compose activos.
 
-1. **Crear archivo de entorno:**
+1. **Crear archivo de entorno (opcional):**
 
    ```bash
    cp .env.example .env
@@ -72,112 +72,39 @@ Al levantar el servicio, la ingesta corre automáticamente en segundo plano (`In
 4. **Paso 4/5 (Detección de Cambios):** Compara los registros entrantes contra el estado actual en la base de datos para identificar proyectos nuevos o cambios de estado respecto a la corrida previa.
 5. **Paso 5/5 (Persistencia Idempotente):** Inserta o actualiza los registros limpios en SQLite mediante `upsert`. Corridas sucesivas no duplican información ni alteran datos válidos.
 
-En la consola se aprecian los logs en tiempo real indicando el avance de cada fase:
+En la consola se aprecian los logs en tiempo real indicando el avance de cada fase, como por ejemplo:
 
 ```
 [IngestionService] --- [Paso 1/5] Extracción: Obteniendo páginas desde mock-api ---
 [IngestionService] [Paso 1/5] Registros descargados: 112
 [IngestionService] --- [Paso 2/5] Limpieza, Validación y Archivo de Rechazados ---
-[IngestionService] [Paso 2/5] Resultado: 103 válidos | 9 inválidos
-[IngestionService] [Paso 2/5] Archivo de rechazados sobrescrito en: ./data/rejected.json
-[IngestionService] --- [Paso 3/5] Deduplicación (conservando actualizado_en más reciente) ---
-[IngestionService] [Paso 3/5] Proyectos únicos finales tras resolver duplicados: 91
-[IngestionService] --- [Paso 4/5] Detección de Cambios entre Ejecuciones ---
-[IngestionService] [Paso 4/5] Detección: 91 nuevos | 0 con cambio de estado
-[IngestionService] [Paso 4/5] Archivo de historial de cambios actualizado en: ./data/changes.json
-[IngestionService] --- [Paso 5/5] Persistencia en SQLite (Idempotente) ---
-[IngestionService] --- Pipeline ETL finalizado con éxito ---
 ```
 
 ### ¿Dónde quedan los datos generados?
 
-- **Archivo de rechazados:** `app/data/rejected.json` (se sobrescribe en cada corrida para reflejar el estado de la última ingesta, con `id`, `nombre` y `motivo`).
-- **Archivo de historial de cambios:** `app/data/changes.json` (se mantiene de forma acumulativa registrando fecha y hora en formato horario chileno, proyectos nuevos y la bitácora histórica de transiciones de estado).
 - **Base de datos SQLite:** `app/data/dev.db` (almacena los proyectos normalizados y deduplicados con su estado actualizado).
+- **Archivo de rechazados:** `app/data/rejected.json` (se sobrescribe en cada corrida con los registros inválidos y el motivo del descarte).
+- **Archivo de historial de cambios:** `app/data/changes.json` (bitácora acumulativa con la fecha oficial chilena, proyectos nuevos y transiciones de estado).
 
 ---
 
-## Funcionalidad Opcional Extra: Detección de Cambios entre Ejecuciones
+## Funcionalidad Opcional: Detección de Cambios entre Ejecuciones
 
-En el enunciado de la prueba técnica se incluye como requerimiento extra:
+En el enunciado se planteó como desafío extra:
 
 > _"Detección de cambios entre ejecuciones: informar qué proyectos son nuevos o cambiaron de estado."_
 
-Esta funcionalidad fue implementada en su totalidad para ofrecer trazabilidad continua del ciclo de vida de los proyectos entre ejecuciones sucesivas del pipeline.
+Para abordarlo de forma limpia y verificable, se implementó lo siguiente:
 
-### 1. Mecanismo de Detección
+1. **Mecanismo de detección:** En el paso 4 del ETL, antes del `upsert`, se comparan los registros limpios contra SQLite. Si el ID no existía, se clasifica como proyecto nuevo; si ya existía pero su estado cambió, se registra la transición (`estado_anterior` -> `estado_nuevo`). Además, SQLite se actualiza con el nuevo estado para que `GET /proyectos` y `GET /resumen` reflejen siempre la información vigente.
+2. **Historial acumulativo y zona horaria chilena:** La bitácora se persiste en `app/data/changes.json` con marcas de tiempo en formato ISO 8601 bajo la zona horaria oficial de Chile (`America/Santiago`, ej. `2026-11-05T21:54:53-03:00`), evitando desfasajes UTC. Se eligió guardarlo en JSON para no alterar el esquema de SQLite solicitado en el contrato y prevenir interferencias con los scripts de corrección del evaluador.
+3. **Disparo bajo demanda (`POST /ingesta`):** Para probar la detección sin reiniciar el servicio, se habilitó el endpoint administrativo `POST /ingesta` (protegido por `X-API-Key`):
+   ```bash
+   curl -X POST -H "X-API-Key: dev-api-key" http://localhost:8000/ingesta
+   ```
+   Retorna de inmediato el resultado de la corrida y el detalle de novedades detectadas.
 
-En el paso 4 del ETL, antes de persistir los datos en SQLite:
-
-- Se consulta el estado actual de los proyectos almacenados en la base de datos mediante Prisma.
-- Se compara cada registro entrante limpio contra la base de datos:
-  - **Proyecto Nuevo:** Si el `id` no existe en la base de datos, se identifica como nuevo y se almacena en la lista de proyectos ingresados con su fecha de detección.
-  - **Cambio de Estado:** Si el `id` ya existe pero su `estado` entrante difiere del que está en la base de datos, se registra la transición con `id`, `nombre`, `estado_anterior`, `estado_nuevo` y fecha de detección.
-  - **Sin cambio:** Si el estado es idéntico al persistido, no genera falsos positivos.
-- Adicionalmente, el estado del proyecto en la base de datos SQLite se actualiza al nuevo estado vía `upsert`, asegurando que tanto `GET /proyectos` como `GET /resumen` reflejen siempre el estado vigente del negocio.
-
-### 2. Zona Horaria Chilena Oficial
-
-Para asegurar consistencia en auditorías, todas las marcas de tiempo (`ultima_ejecucion`, `detectado_en`) se generan explícitamente en la zona horaria chilena (`America/Santiago`) bajo formato ISO 8601 (por ejemplo `2026-11-05T21:54:53-03:00`). Esto elimina desfases producidos por servidores configurados en UTC o variaciones por el cambio de horario de invierno/verano en Chile.
-
-### 3. Historial Acumulativo en `app/data/changes.json`
-
-El historial se guarda de manera acumulativa en el archivo `app/data/changes.json`:
-
-- **¿Por qué en archivo JSON y no en la base de datos?** Se tomó esta decisión técnica para mantener la tabla de proyectos con la estructura exacta y canónica solicitada en el contrato de la prueba, asegurando que los scripts o suites de prueba automáticas del evaluador no fallen por diferencias de esquema en SQLite. Además, tener un archivo JSON dedicado permite una inspección humana directa y limpia de las ejecuciones.
-- Si el archivo ya existía de corridas anteriores, se preserva todo el historial previo y se agregan los nuevos cambios detectados.
-
-Estructura de `app/data/changes.json`:
-
-```json
-{
-  "ultima_ejecucion": "2026-11-05T21:54:53-03:00",
-  "resumen_ultima_ejecucion": {
-    "nuevos_detectados": 0,
-    "cambios_estado_detectados": 0
-  },
-  "proyectos_nuevos": [
-    {
-      "id": "P-0002",
-      "nombre": "Parque Eólico Altiplano",
-      "estado": "Aprobado",
-      "detectado_en": "2026-11-05T21:49:46-03:00"
-    }
-  ],
-  "historial_cambios_estado": [
-    {
-      "id": "P-0012",
-      "nombre": "Planta Solar Los Andes",
-      "estado_anterior": "En evaluación",
-      "estado_nuevo": "Aprobado",
-      "detectado_en": "2026-11-05T21:49:46-03:00"
-    }
-  ]
-}
-```
-
-### 4. Disparo bajo demanda vía `POST /ingesta`
-
-Para facilitar la verificación de esta funcionalidad sin necesidad de reiniciar contenedores, se implementó el endpoint administrativo **`POST /ingesta`** (protegido con `X-API-Key`):
-
-```bash
-curl -X POST -H "X-API-Key: dev-api-key" http://localhost:8000/ingesta
-```
-
-Retorna de inmediato el resultado de la corrida y los cambios detectados:
-
-```json
-{
-  "mensaje": "Proceso de ingesta y detección de cambios ejecutado con éxito",
-  "total_descargados": 112,
-  "total_validos": 103,
-  "total_rechazados": 9,
-  "proyectos_unicos_guardados": 91,
-  "nuevos_detectados": 0,
-  "cambios_estado_detectados": 0,
-  "cambios_estado": []
-}
-```
+_(Nota: Dado que la fuente `mock-api` es estática y por contrato no debe modificarse en el repositorio, ejecuciones repetidas contra la misma fuente reportarán 0 cambios. Toda la lógica de detección ante proyectos nuevos y cambios de estado reales está cubierta y comprobada en las pruebas automatizadas, por ende al ejecutarlas, se verá reflejado que la funcionalidad está correcta)._
 
 ---
 
@@ -185,8 +112,8 @@ Retorna de inmediato el resultado de la corrida y los cambios detectados:
 
 ```bash
 cd app
-pnpm test          # Pruebas unitarias de limpieza, tracking de cambios y lógica (55 tests)
-pnpm test:e2e      # Pruebas de integración HTTP de la API (13 tests)
+pnpm test          # Pruebas unitarias de limpieza, tracking de cambios y lógica
+pnpm test:e2e      # Pruebas de integración HTTP de la API
 ```
 
 Las pruebas cubren:
@@ -207,7 +134,7 @@ Las pruebas cubren:
 - **NestJS y TypeScript:** Arquitectura por capas (módulos, controladores, servicios y guards) con inyección de dependencias. TypeScript garantiza cumplimiento estricto del contrato de datos.
 - **SQLite + Prisma ORM:** Ideal para la escala del ejercicio (~100 proyectos) sin sobrecargar con bases de datos externas. Prisma asegura transacciones seguras, migraciones sencillas y consultas agregadas (`groupBy` para `/resumen`).
 - **Separación Ingesta vs Servidor API:** La API consulta exclusivamente SQLite. Nunca hace peticiones a la fuente externa en tiempo de request, garantizando respuestas rápidas y desacoplamiento.
-- **Historial de cambios en JSON y no en base de datos:** Se decidió almacenar el historial de auditoría de cambios en `app/data/changes.json` para facilitar el acceso rápido a la información, evitar modificar la estructura canónica exigida para la tabla de proyectos y asegurar que las pruebas automáticas del evaluador contra SQLite no tengan ninguna interferencia.
+- **Historial de cambios en JSON:** Se almacena en `app/data/changes.json` para mantener intacto el esquema canónico de SQLite y asegurar que las pruebas automáticas del evaluador no tengan interferencias.
 
 ### Supuestos Adoptados
 
@@ -215,12 +142,7 @@ Las pruebas cubren:
 2. **Disparo automático de la ingesta:** Dado que el enunciado solicita que el servicio pueda ejecutarse con un solo comando, se asume que la ingesta debe iniciarse automáticamente al arrancar el contenedor (`onModuleInit`), sin requerir interacción manual adicional para poblar los datos iniciales.
 3. **Persistencia de proyectos no presentes en nuevas corridas:** Si en una nueva ejecución de ingesta algún proyecto previo no viene en los datos de la fuente externa, se asume que mantiene su último estado conocido y no se elimina de la base de datos.
 4. **Parámetros query sobrantes en la API:** Si el cliente envía parámetros query adicionales no contemplados en el contrato (por ejemplo `GET /proyectos?foo=bar` o `GET /resumen?orden=desc`), la API los ignora y procesa los filtros válidos sin fallar innecesariamente.
-
-### Supuestos Funcionalidad Extra
-
-1. **Trigger ingesta:** Se crea un disparador en POST /ingesta para iniciar el proceso y probar la funcionalidad sin reiniciar el servicio.
-2. **Datos que cambian:** Se asume que solo el estado del proyecto cambiará en las nuevas ingestas.
-3. **Almacenamiento cambios:** Se establece la forma de almacnar el registro de cambios completo en el mismo formato que los registros rechazados, en un archivo JSON, en la base de datos solo se actualiza el estado del proyecto, además de evitar posibles interferencias con el script para la revisión de los endpoints obligatorios.
+5. **Alcance de cambios en nuevas ejecuciones de ingesta:** Para la detección de cambios entre ejecuciones, se asume que el cambio de negocio son solo cambios de estado del proyecto.
 
 ### Aclaración sobre Variables de Entorno y Credenciales
 
@@ -237,9 +159,7 @@ Toda la lógica fue validada y ajustada contra los requerimientos de `CONTRATO.m
 
 ## ¿Qué mejoraría con más tiempo?
 
-- **Trigger manual de ingesta (YA IMPLEMENTADO PARA LA FUNCIONALIDAD EXTRA):** Agregar un endpoint administrativo o un comando de consola (`CLI`) para ejecutar la ingesta bajo demanda sin reiniciar el contenedor.
-- **Detección de cambios de proyectos (historial) (YA IMPLEMENTADO PARA LA FUNCIONALIDAD EXTRA):** Implementar una tabla que guarde un log de auditoría para saber qué proyectos cambiaron de estado o cuáles entraron como nuevos entre cada ejecución.
 - **Documentación con Swagger:** Añadir `@nestjs/swagger` para tener una interfaz interactiva donde probar los endpoints visualmente.
-- **Manejo de logs y monitoreo:** Mejorar el logging estructurado con herramientas especializadas para facilitar el seguimiento en caso de errores en producción, monitoreo de rendimiento y recursos.
-- **Nuevos Endpoints y/o Filtros:** Crear nuevos endpoints y/o filtros, como por ejemplo para consultar un registro en específico, u obtener el resumen de proyectos por región bajo una cierta cantidad de proyectos o monto, para disponer de más información a los usuarios.
-- **Seguridad:** Añadir controles de accesos más robustos, como por ejemplo con credenciales o tokens de sesión para los usuarios, encriptación, comunicaciones, etc.
+- **Manejo de logs y monitoreo:** Mejorar el logging estructurado con herramientas especializadas (ej. Winston o Pino) para facilitar el seguimiento en caso de errores en producción, monitoreo de rendimiento y recursos.
+- **Nuevos Endpoints y/o Filtros:** Crear nuevos endpoints y filtros, como consultar un registro específico por ID (`GET /proyectos/:id`) o filtrar el resumen por montos y rangos de fecha.
+- **Seguridad avanzada:** Añadir controles de accesos más robustos con tokens de sesión (JWT) para usuarios, expiración, roles y cifrado de comunicaciones.
