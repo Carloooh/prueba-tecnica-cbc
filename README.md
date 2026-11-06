@@ -138,7 +138,8 @@ Soy consciente de que subir archivos de entorno (`.env`) al repositorio y expone
 ## ¿Qué mejoraría con más tiempo?
 
 - **Trigger manual de ingesta:** Agregar un endpoint administrativo o un comando de consola (`CLI`) para ejecutar la ingesta bajo demanda sin reiniciar el contenedor.
-- **Detección de cambios (historial):** Implementar una tabla que guarde un log de auditoría para saber qué proyectos cambiaron de estado o cuáles entraron como nuevos entre cada ejecución.
+- **Detección de cambios de proyectos (historial):** Implementar una tabla que guarde un log de auditoría para saber qué proyectos cambiaron de estado o cuáles entraron como nuevos entre cada ejecución.
 - **Documentación con Swagger:** Añadir `@nestjs/swagger` para tener una interfaz interactiva donde probar los endpoints visualmente.
-- **Manejo de logs y monitoreo:** Mejorar el logging estructurado con herramientas especializadas para facilitar el seguimiento en caso de errores en producción.
+- **Manejo de logs y monitoreo:** Mejorar el logging estructurado con herramientas especializadas para facilitar el seguimiento en caso de errores en producción, monitoreo de rendimiento y recursos.
 - **Nuevos Endpoints y/o Filtros:** Crear nuevos endpoints y/o filtros, como por ejemplo para consultar un registro en específico, u obtener el resumen de proeyctos por región bajo una cierta cantidad de proyectos o monto, para disponer de más información a los usuarios.
+- **Seguridad:** Añadir controles de accesos más robustos, como por ejemplo con credenciales o tokens de sesión para los usuarios, encriptación comunicaciones, etc.
